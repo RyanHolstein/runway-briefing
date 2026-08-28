@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+     xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Runway Briefing</title>
+    <description>Your daily five-minute download on everything happening in the skies.</description>
+    <language>en</language>
+    <itunes:author>Runway Briefing</itunes:author>
+    <itunes:category text="News"/>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:image href="https://RyanHolstein.github.io/runway-briefing/cover.jpg"/>
+    <link>https://RyanHolstein.github.io/runway-briefing</link>
+    <atom:link href="https://RyanHolstein.github.io/runway-briefing/feed.xml" rel="self" type="application/rss+xml"/>
+    
+    <item>
+      <title>Runway Briefing — August 28, 2026</title>
+      <description><![CDATA[American Airlines drops its summer 2027 route plans — but with United's blockbuster expansion still fresh, the timing (and the ambition) leaves a lot to be desired.*]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/2026-08-28.mp3" length="4437934" type="audio/mpeg"/>
+      <guid isPermaLink="false">6ce51d2c254586e4b47c29ede2488d3c</guid>
+      <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+  </channel>
+</rss>
