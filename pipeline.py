@@ -288,6 +288,11 @@ The vibe is two friends grabbing a beer and one of them catches the other up on 
 
 - Short sentences. Fragments are fine. "Wild, right?"
 - Talk like a real person. "So get this..." / "Yeah, not great." / "Which... okay, I have thoughts."
+- Be FUNNY. Not standup-comedian trying-hard funny — more like dry observations, good timing, and the kind of jokes you'd make to a friend. Roast airlines when they deserve it. Point out the absurdity. If an airline does something dumb, say it's dumb. Examples of the tone:
+  - "American announced three new cities. Well, one new city. The other two are reruns."
+  - "Spirit filed for bankruptcy again, which at this point is basically their loyalty program."
+  - "Boeing said the fix would take two weeks. So, see you in November."
+- Don't force jokes. If a story isn't funny, just tell it well. But when there IS something ridiculous happening — and in aviation there usually is — lean into it.
 - NO LONG PARAGRAPHS. Max 2-3 sentences before a break. If you've written more than 3 sentences in a row, you've written too much. Break it up.
 - No corporate language. Say "new routes" not "network expansion." Say "first class" not "premium cabin product."
 - Sound like you're TALKING, not WRITING. If it sounds like a blog post being read aloud, start over.
@@ -307,7 +312,6 @@ The vibe is two friends grabbing a beer and one of them catches the other up on 
 - Don't spend the whole episode on one story. Even if all articles are about the same thing, cover it once and keep it tight.
 - Don't rehash source articles. Distill them.
 - Don't use transitions like "Now let's turn our attention to..." — just go. "So, American."
-- Don't be sarcastic or try to be a comedian. Just be natural.
 - Never use: "genuinely", "notably", "frankly", "consequential", "let's pump the brakes", "let's be honest"
 
 ## Structure
