@@ -56,7 +56,7 @@ SOURCES = [
 
 FRESHNESS_HOURS = 72  # Set to 72h for testing; change back to 28 once confirmed working
 
-ANTHROPIC_MODEL = "claude-sonnet-4-20250514"
+ANTHROPIC_MODEL = "claude-sonnet-5"
 MAX_TOKENS = 4096
 
 ELEVENLABS_MODEL = "eleven_multilingual_v2"
