@@ -312,19 +312,17 @@ The vibe is two friends grabbing a beer and one of them catches the other up on 
 
 ## Structure
 
-1. **Hook** — 1 sentence that makes someone keep their earbuds in. No intro yet.
-2. **Intro** — "You're listening to Runway Briefing. I'm your host. Let's get into it."
-3. **Stories** — Cover each story in 45-90 seconds. Lead with the biggest. Hit 2-4 stories total. Keep it moving.
-4. **Sign-off** — "That's it for {today}. If you like the show, hit subscribe. See you tomorrow."
+1. **Intro** — Start with: "Hey, welcome to Runway Briefing for [day of week], [date]. Let's get into it." No cold open, no teaser hook. Just say hi and go.
+2. **Stories** — Cover each story in 45-90 seconds. Lead with the biggest. Hit 2-4 stories total. Keep it moving.
+3. **Sign-off** — "That's your briefing for today. If you're enjoying it, hit subscribe. See you tomorrow."
 
 ## Rules
 
 - Freshness: only cover stories published in the last 24 hours (by original post date, not scrape time).
 - Target 400-800 words total. That's 3-5 minutes. Short is better than padded.
 - Spoken text only — no stage directions, no [pause], no sound cues.
-- Use --- between sections.
-- Bold the episode title at the top.
-- Include one-line Episode Summary after the title.
+- NO markdown formatting in the script. No bold, no italics, no asterisks, no headers. This goes straight to text-to-speech.
+- Put the episode title on the first line as plain text, then "Episode Summary:" on the next line. These are metadata only — they won't be spoken. Start the actual spoken script on the line after.
 - Credit sources casually: "Brett over at Cranky Flier pointed out..." / "Zach Griff had a good piece on this..."
 - If it's a slow news day with only 1-2 stories, make it a 2-minute episode. That's fine.
 - If a story was covered in a recent episode (listed below), don't repeat it unless there's a NEW development. If there is, say "update on something we covered yesterday..." — don't re-explain the whole thing.
@@ -388,11 +386,16 @@ def generate_audio(script: str, output_path: Path) -> Path:
     voice_id = os.environ.get("ELEVENLABS_VOICE_ID", DEFAULT_VOICE_ID)
     print(f"Generating audio (voice: {voice_id})...")
 
-    # Strip markdown for cleaner speech
+    # Strip markdown and metadata for cleaner speech
     clean = script
-    clean = re.sub(r"\*\*(.+?)\*\*", r"\1", clean)
+    # Remove the title line (first non-empty line) and Episode Summary line
+    clean = re.sub(r"^.+?\n", "", clean, count=1)  # title
     clean = re.sub(r"^Episode Summary:.*$", "", clean, flags=re.MULTILINE)
-    clean = re.sub(r"^---+$", "", clean, flags=re.MULTILINE)
+    # Remove all markdown formatting
+    clean = re.sub(r"\*\*(.+?)\*\*", r"\1", clean)  # bold
+    clean = re.sub(r"\*(.+?)\*", r"\1", clean)  # italic
+    clean = re.sub(r"^#{1,6}\s+", "", clean, flags=re.MULTILINE)  # headers
+    clean = re.sub(r"^---+$", "", clean, flags=re.MULTILINE)  # dividers
     clean = re.sub(r"\n{3,}", "\n\n", clean)
 
     resp = requests.post(
