@@ -57,7 +57,7 @@ SOURCES = [
 FRESHNESS_HOURS = 72  # Set to 72h for testing; change back to 28 once confirmed working
 
 ANTHROPIC_MODEL = "claude-sonnet-5"
-MAX_TOKENS = 4096
+MAX_TOKENS = 16000
 
 ELEVENLABS_MODEL = "eleven_multilingual_v2"
 DEFAULT_VOICE_ID = "pNInz6obpgDQGcFmaJgB"  # "Adam" — change in GitHub secrets
@@ -230,7 +230,11 @@ def generate_script(articles: list[dict]) -> str:
         }],
     )
 
-    return message.content[0].text
+    # Find the text block (skip any thinking blocks)
+    for block in message.content:
+        if hasattr(block, "text"):
+            return block.text
+    return message.content[-1].text
 
 
 # ──────────────────────────────────────────────
