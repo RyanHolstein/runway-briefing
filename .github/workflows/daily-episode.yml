@@ -35,6 +35,8 @@ jobs:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           PODCAST_HOST_URL: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
           PODCAST_IMAGE_URL: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/cover.jpg"
           SITE_DIR: "site"

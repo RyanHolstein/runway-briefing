@@ -499,6 +499,123 @@ def generate_rss(site_dir: Path, host_url: str, image_url: str = ""):
 
 
 # ──────────────────────────────────────────────
+# Step 5: Email Digest
+# ──────────────────────────────────────────────
+
+EMAIL_DIGEST_PROMPT = """You are formatting an aviation news email digest. Given the articles below, do two things:
+
+1. Assign each article to ONE category from this list: ROUTES & NETWORK, AIRLINE OPERATIONS, DEALS & M&A, TECH & INNOVATION, LAWSUITS & REGULATION, INTERNATIONAL, ALSO TODAY
+2. Write a one-sentence summary for each article (concise, factual, include key numbers/names)
+
+Output as JSON — an array of objects with fields: "category", "title", "summary", "url", "source"
+Sort by category. Only output the JSON array, nothing else."""
+
+
+def generate_email_digest(articles: list[dict]) -> str:
+    """Use Claude to categorize articles and generate an HTML email digest."""
+    import anthropic
+
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        print("  Skipping email: no ANTHROPIC_API_KEY")
+        return ""
+
+    client = anthropic.Anthropic(api_key=api_key)
+    article_text = "\n\n".join(
+        f"Source: {a['source']}\nTitle: {a['title']}\nURL: {a['url']}\nContent: {a.get('summary', '')[:500]}"
+        for a in articles
+    )
+
+    message = client.messages.create(
+        model=ANTHROPIC_MODEL,
+        max_tokens=4096,
+        system=EMAIL_DIGEST_PROMPT,
+        messages=[{"role": "user", "content": f"Here are today's articles:\n\n{article_text}"}],
+    )
+
+    # Extract text from response
+    response_text = ""
+    for block in message.content:
+        if hasattr(block, "text"):
+            response_text = block.text
+            break
+
+    # Parse JSON from response
+    try:
+        # Strip markdown code fences if present
+        cleaned = re.sub(r"^```(?:json)?\s*", "", response_text.strip())
+        cleaned = re.sub(r"\s*```$", "", cleaned)
+        categorized = json.loads(cleaned)
+    except json.JSONDecodeError:
+        print("  Warning: Could not parse digest JSON, using flat list")
+        categorized = [
+            {"category": "TODAY'S STORIES", "title": a["title"], "summary": a.get("summary", "")[:200],
+             "url": a["url"], "source": a["source"]}
+            for a in articles
+        ]
+
+    # Group by category
+    categories = {}
+    for item in categorized:
+        cat = item.get("category", "OTHER")
+        categories.setdefault(cat, []).append(item)
+
+    # Build HTML email
+    today = datetime.now().strftime("%a, %b %d")
+    sections_html = ""
+    for cat, items in categories.items():
+        items_html = ""
+        for item in items:
+            source = item.get("source", "")
+            url = item.get("url", "#")
+            summary = item.get("summary", "")
+            items_html += f'<li style="margin-bottom:10px;"><a href="{url}" style="color:#1a73e8;font-weight:bold;text-decoration:none;">[{source}]</a> {summary}</li>\n'
+        sections_html += f"""
+<h3 style="color:#333;border-bottom:1px solid #ddd;padding-bottom:4px;margin-top:24px;font-size:14px;text-transform:uppercase;letter-spacing:1px;">{cat}</h3>
+<ul style="list-style:none;padding:0;margin:8px 0;">{items_html}</ul>
+"""
+
+    html = f"""<html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:640px;margin:0 auto;padding:20px;color:#333;">
+<h2 style="margin-bottom:4px;">Runway Briefing</h2>
+<p style="color:#888;margin-top:0;">Today's bundle for {today}.</p>
+<h3 style="color:#333;font-size:14px;text-transform:uppercase;letter-spacing:1px;">TODAY'S RUNDOWN</h3>
+{sections_html}
+<hr style="border:none;border-top:1px solid #eee;margin:24px 0;">
+<p style="color:#888;font-size:12px;">Runway Briefing — your daily aviation news digest.<br>
+<a href="https://ryanholstein.github.io/runway-briefing/episodes/{datetime.now().strftime('%Y-%m-%d')}.mp3" style="color:#1a73e8;">Listen to today's episode</a></p>
+</body></html>"""
+
+    return html
+
+
+def send_email(subject: str, html_body: str, host_url: str):
+    """Send the digest email via Gmail SMTP."""
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+
+    gmail_address = os.environ.get("GMAIL_ADDRESS")
+    gmail_password = os.environ.get("GMAIL_APP_PASSWORD")
+    recipient = os.environ.get("EMAIL_RECIPIENT", "ryan.holstein@gmail.com")
+
+    if not gmail_address or not gmail_password:
+        print("  Skipping email: GMAIL_ADDRESS or GMAIL_APP_PASSWORD not set")
+        return
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = f"Runway Briefing <{gmail_address}>"
+    msg["To"] = recipient
+    msg.attach(MIMEText(html_body, "html"))
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(gmail_address, gmail_password)
+        server.sendmail(gmail_address, recipient, msg.as_string())
+
+    print(f"  ✓ Email sent to {recipient}")
+
+
+# ──────────────────────────────────────────────
 # Main
 # ──────────────────────────────────────────────
 
@@ -554,9 +671,11 @@ def main():
     print(f"✓ Script generated ({len(script.split())} words)")
 
     # Extract title and summary from the script
+    # Title is the first non-empty line; summary follows "Episode Summary:"
+    lines = [l.strip() for l in script.strip().split("\n") if l.strip()]
     title_match = re.search(r"\*\*\"?(.+?)\"?\*\*", script)
+    ep_title = title_match.group(1) if title_match else (lines[0] if lines else f"Runway Briefing — {today_str}")
     summary_match = re.search(r"Episode Summary:\s*(.+)", script)
-    ep_title = title_match.group(1) if title_match else f"Runway Briefing — {today_str}"
     ep_summary = summary_match.group(1).strip() if summary_match else ""
 
     # Save script
@@ -586,10 +705,22 @@ def main():
     print("=" * 50)
     generate_rss(site_dir, host_url, image_url)
 
-    # Step 5: Save to database
+    # Step 5: Email digest
+    print("=" * 50)
+    print("STEP 5: Email Digest")
+    print("=" * 50)
+    try:
+        digest_html = generate_email_digest(articles)
+        if digest_html:
+            today_nice = datetime.now().strftime("%a, %b %d")
+            send_email(f"Runway Briefing — {today_nice}", digest_html, host_url)
+    except Exception as e:
+        print(f"  Warning: Email failed ({e}), continuing...")
+
+    # Step 6: Save to database
     if conn:
         print("=" * 50)
-        print("STEP 5: Save to DB")
+        print("STEP 6: Save to DB")
         print("=" * 50)
         save_episode(conn, articles, ep_title, ep_summary)
         conn.close()
