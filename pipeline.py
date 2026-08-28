@@ -36,7 +36,7 @@ SOURCES = [
     {
         "name": "Cranky Flier",
         "url": "https://crankyflier.com/feed/",
-        "attribution": "Cranky Flier",
+        "attribution": "Brett Snyder at Cranky Flier",
     },
     {
         "name": "From the Tray Table",
@@ -50,8 +50,48 @@ SOURCES = [
     },
     {
         "name": "The Points Guy",
-        "url": "https://thepointsguy.com/news/feed/",
+        "url": "https://thepointsguy.com/feed/",
         "attribution": "The Points Guy",
+    },
+    {
+        "name": "Simple Flying",
+        "url": "https://simpleflying.com/feed/",
+        "attribution": "Simple Flying",
+    },
+    {
+        "name": "View from the Wing",
+        "url": "https://viewfromthewing.com/feed/",
+        "attribution": "Gary Leff at View from the Wing",
+    },
+    {
+        "name": "Live and Let's Fly",
+        "url": "https://liveandletsfly.com/feed/",
+        "attribution": "Live and Let's Fly",
+    },
+    {
+        "name": "AirlineGeeks",
+        "url": "https://airlinegeeks.com/feed/",
+        "attribution": "AirlineGeeks",
+    },
+    {
+        "name": "Paddle Your Own Kanoo",
+        "url": "https://paddleyourownkanoo.com/feed/",
+        "attribution": "Paddle Your Own Kanoo",
+    },
+    {
+        "name": "The Air Current",
+        "url": "https://theaircurrent.com/feed/",
+        "attribution": "The Air Current",
+    },
+    {
+        "name": "FlightGlobal",
+        "url": "https://www.flightglobal.com/feed/",
+        "attribution": "FlightGlobal",
+    },
+    {
+        "name": "Aviation Week",
+        "url": "https://aviationweek.com/rss.xml",
+        "attribution": "Aviation Week",
     },
 ]
 
