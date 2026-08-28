@@ -25,6 +25,7 @@ from pathlib import Path
 import feedparser
 import requests
 from bs4 import BeautifulSoup
+import psycopg2
 
 
 # ──────────────────────────────────────────────
@@ -54,7 +55,7 @@ SOURCES = [
     },
 ]
 
-FRESHNESS_HOURS = 72  # Set to 72h for testing; change back to 28 once confirmed working
+FRESHNESS_HOURS = 28
 
 ANTHROPIC_MODEL = "claude-sonnet-5"
 MAX_TOKENS = 16000
@@ -159,47 +160,183 @@ def scrape_all() -> list[dict]:
 
 
 # ──────────────────────────────────────────────
+# Database: Episode Memory (Neon Postgres)
+# ──────────────────────────────────────────────
+
+def get_db():
+    """Connect to Neon Postgres. Returns None if DATABASE_URL not set."""
+    db_url = os.environ.get("DATABASE_URL")
+    if not db_url:
+        print("  ⚠ DATABASE_URL not set — running without memory")
+        return None
+    try:
+        conn = psycopg2.connect(db_url, sslmode="require")
+        return conn
+    except Exception as e:
+        print(f"  ⚠ DB connection failed: {e}")
+        return None
+
+
+def init_db(conn):
+    """Create tables if they don't exist."""
+    with conn.cursor() as cur:
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS covered_articles (
+                id SERIAL PRIMARY KEY,
+                url TEXT UNIQUE NOT NULL,
+                title TEXT,
+                source TEXT,
+                covered_date DATE NOT NULL,
+                created_at TIMESTAMPTZ DEFAULT NOW()
+            );
+            CREATE TABLE IF NOT EXISTS episodes (
+                id SERIAL PRIMARY KEY,
+                episode_date DATE UNIQUE NOT NULL,
+                title TEXT,
+                summary TEXT,
+                article_count INTEGER,
+                created_at TIMESTAMPTZ DEFAULT NOW()
+            );
+        """)
+        conn.commit()
+
+
+def filter_already_covered(conn, articles: list[dict]) -> list[dict]:
+    """Remove articles that were already covered in previous episodes."""
+    if not conn or not articles:
+        return articles
+
+    urls = [a["url"] for a in articles if a.get("url")]
+    if not urls:
+        return articles
+
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT url FROM covered_articles WHERE url = ANY(%s)",
+            (urls,)
+        )
+        covered_urls = {row[0] for row in cur.fetchall()}
+
+    if covered_urls:
+        print(f"  Filtering out {len(covered_urls)} already-covered article(s)")
+
+    return [a for a in articles if a.get("url") not in covered_urls]
+
+
+def get_recent_episodes_context(conn, days: int = 3) -> str:
+    """Get summaries of recent episodes so Claude can reference them."""
+    if not conn:
+        return ""
+
+    with conn.cursor() as cur:
+        cur.execute("""
+            SELECT episode_date, title, summary
+            FROM episodes
+            WHERE episode_date >= CURRENT_DATE - %s
+            ORDER BY episode_date DESC
+            LIMIT 5
+        """, (days,))
+        rows = cur.fetchall()
+
+    if not rows:
+        return ""
+
+    context = "## Recent episodes (so you can reference them naturally)\n"
+    for date, title, summary in rows:
+        context += f"- {date}: {title} — {summary}\n"
+    return context
+
+
+def save_episode(conn, articles: list[dict], title: str, summary: str):
+    """Save covered articles and episode info to the database."""
+    if not conn:
+        return
+
+    today = datetime.now().date()
+
+    with conn.cursor() as cur:
+        # Save episode
+        cur.execute("""
+            INSERT INTO episodes (episode_date, title, summary, article_count)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (episode_date) DO UPDATE
+            SET title = EXCLUDED.title, summary = EXCLUDED.summary, article_count = EXCLUDED.article_count
+        """, (today, title, summary, len(articles)))
+
+        # Save covered articles
+        for a in articles:
+            if a.get("url"):
+                cur.execute("""
+                    INSERT INTO covered_articles (url, title, source, covered_date)
+                    VALUES (%s, %s, %s, %s)
+                    ON CONFLICT (url) DO NOTHING
+                """, (a["url"], a.get("title"), a.get("source"), today))
+
+        conn.commit()
+    print(f"  ✓ Saved {len(articles)} article(s) and episode to database")
+
+
+# ──────────────────────────────────────────────
 # Step 2: Generate Script (Claude API)
 # ──────────────────────────────────────────────
 
-SYSTEM_PROMPT = """You are a podcast scriptwriter for "Runway Briefing", a daily aviation news podcast. You write scripts that sound like a knowledgeable friend catching the listener up on the day's aviation news over coffee — informed, opinionated where appropriate, but never dry or robotic.
+SYSTEM_PROMPT = """You write scripts for "Runway Briefing", a short daily aviation news podcast.
 
-## Voice & Tone
-- Conversational and energetic, like a host who genuinely loves aviation
-- Use contractions, rhetorical questions, and natural speech patterns
-- Okay to have opinions ("This is a big deal because…", "I'm not sure that math works out…")
-- Avoid corporate-speak and press-release language — rewrite everything in your own words
-- Reference context the audience would know
-- Light humor is welcome; forced jokes are not
+The vibe is two friends grabbing a beer and one of them catches the other up on what's happening in aviation. NOT a news anchor. NOT a blog post read aloud. Think: how would you actually SAY this to a friend?
+
+## How it should SOUND
+
+- Short sentences. Fragments are fine. "Wild, right?"
+- Talk like a real person. "So get this..." / "Yeah, not great." / "Which... okay, I have thoughts."
+- NO LONG PARAGRAPHS. Max 2-3 sentences before a break. If you've written more than 3 sentences in a row, you've written too much. Break it up.
+- No corporate language. Say "new routes" not "network expansion." Say "first class" not "premium cabin product."
+- Sound like you're TALKING, not WRITING. If it sounds like a blog post being read aloud, start over.
+
+## CRITICAL RULES ABOUT LENGTH
+
+- Each story gets ONE key takeaway and ONE "why it matters." That's it. Move on.
+- The lead story is 60-90 seconds MAX. That's about 150-200 words. Count them.
+- Every other story is 30-60 seconds. About 75-120 words each.
+- The ENTIRE script must be 400-600 words. Not 700. Not 800. 400-600.
+- If there are 3 articles about the same topic, that's ONE story in the podcast, not three.
+- NEVER list out every route, every city, every detail. Pick the 2-3 most interesting facts and skip the rest. Your listener can Google it.
+- If you only have one story, make a 90-second episode. That's fine. Don't stretch.
+
+## What NOT to do
+
+- Don't spend the whole episode on one story. Even if all articles are about the same thing, cover it once and keep it tight.
+- Don't rehash source articles. Distill them.
+- Don't use transitions like "Now let's turn our attention to..." — just go. "So, American."
+- Don't be sarcastic or try to be a comedian. Just be natural.
+- Never use: "genuinely", "notably", "frankly", "consequential", "let's pump the brakes", "let's be honest"
 
 ## Structure
-1. Cold Open (1-2 punchy sentences teasing the biggest story)
-2. Intro: "You're listening to Runway Briefing — your daily five-minute download on everything happening in the skies. I'm your host. Let's taxi to the runway."
-3. Lead Story (60-90 seconds spoken)
-4. Additional Stories (30-60 seconds each, 2-4 stories)
-5. Quick Hits (optional, 30 seconds for minor stories)
-6. Sign-Off: "That's your Runway Briefing for [TODAY'S DATE]. If you're enjoying the show, hit subscribe — it helps more than you know. I'll see you back here tomorrow. Blue skies."
+
+1. **Hook** — 1 sentence that makes someone keep their earbuds in. No intro yet.
+2. **Intro** — "You're listening to Runway Briefing. I'm your host. Let's get into it."
+3. **Stories** — Cover each story in 45-90 seconds. Lead with the biggest. Hit 2-4 stories total. Keep it moving.
+4. **Sign-off** — "That's it for {today}. If you like the show, hit subscribe. See you tomorrow."
 
 ## Rules
-- Only cover stories whose original publish date falls within the last 24 hours. Freshness is based on when the article was posted, not when it was scraped or ingested.
-- If input includes older articles, ignore them unless they provide essential context for a fresh story.
-- Target 750-1,200 words (~5-8 minutes spoken)
-- Write as spoken text only — no stage directions, no sound cues, no [pause] markers
-- Use --- to separate sections
-- Attribute sources naturally: "According to Cranky Flier…", "Zach Griff at From the Tray Table is reporting…"
-- Merge overlapping stories from different sources into one richer segment
-- If fewer than 3 stories, make a shorter episode (~3-4 minutes) rather than padding
-- Skip credit card deals, hotel news, and points strategy unless directly tied to an airline story
-- Bold the episode title at the top
-- Include a one-line Episode Summary after the title
-- On slow news days, it's okay to be shorter. Never pad.
+
+- Freshness: only cover stories published in the last 24 hours (by original post date, not scrape time).
+- Target 400-800 words total. That's 3-5 minutes. Short is better than padded.
+- Spoken text only — no stage directions, no [pause], no sound cues.
+- Use --- between sections.
+- Bold the episode title at the top.
+- Include one-line Episode Summary after the title.
+- Credit sources casually: "Brett over at Cranky Flier pointed out..." / "Zach Griff had a good piece on this..."
+- If it's a slow news day with only 1-2 stories, make it a 2-minute episode. That's fine.
+- If a story was covered in a recent episode (listed below), don't repeat it unless there's a NEW development. If there is, say "update on something we covered yesterday..." — don't re-explain the whole thing.
+
+{recent_episodes}
 
 ## Today's Date
 {today}
 """
 
 
-def generate_script(articles: list[dict]) -> str:
+def generate_script(articles: list[dict], recent_context: str = "") -> str:
     """Send articles to Claude and get back a podcast script."""
     import anthropic
 
@@ -223,7 +360,7 @@ def generate_script(articles: list[dict]) -> str:
     message = client.messages.create(
         model=ANTHROPIC_MODEL,
         max_tokens=MAX_TOKENS,
-        system=SYSTEM_PROMPT.format(today=today),
+        system=SYSTEM_PROMPT.format(today=today, recent_episodes=recent_context),
         messages=[{
             "role": "user",
             "content": f"Write today's Runway Briefing podcast script from these articles:\n\n{articles_text}",
@@ -368,6 +505,15 @@ def main():
 
     today_str = datetime.now().strftime("%Y-%m-%d")
 
+    # Connect to database (optional — works without it)
+    print("=" * 50)
+    print("DATABASE")
+    print("=" * 50)
+    conn = get_db()
+    if conn:
+        init_db(conn)
+        print("  ✓ Connected to Neon")
+
     # Step 1: Scrape
     print("=" * 50)
     print("STEP 1: Scrape")
@@ -376,15 +522,28 @@ def main():
 
     if not articles:
         print("No fresh articles. Skipping episode.")
-        # Write a flag file so the workflow knows to skip
         Path("skip_episode").touch()
+        if conn:
+            conn.close()
         sys.exit(0)
+
+    # Filter out already-covered articles
+    if conn:
+        articles = filter_already_covered(conn, articles)
+        if not articles:
+            print("All articles already covered. Skipping episode.")
+            Path("skip_episode").touch()
+            conn.close()
+            sys.exit(0)
+
+    # Get recent episode context for Claude
+    recent_context = get_recent_episodes_context(conn) if conn else ""
 
     # Step 2: Script
     print("=" * 50)
     print("STEP 2: Script")
     print("=" * 50)
-    script = generate_script(articles)
+    script = generate_script(articles, recent_context)
     print(f"✓ Script generated ({len(script.split())} words)")
 
     # Extract title and summary from the script
@@ -419,6 +578,14 @@ def main():
     print("STEP 4: RSS")
     print("=" * 50)
     generate_rss(site_dir, host_url, image_url)
+
+    # Step 5: Save to database
+    if conn:
+        print("=" * 50)
+        print("STEP 5: Save to DB")
+        print("=" * 50)
+        save_episode(conn, articles, ep_title, ep_summary)
+        conn.close()
 
     print("\n✓ Pipeline complete!")
 

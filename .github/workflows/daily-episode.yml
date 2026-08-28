@@ -34,6 +34,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           PODCAST_HOST_URL: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
           PODCAST_IMAGE_URL: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/cover.jpg"
           SITE_DIR: "site"
