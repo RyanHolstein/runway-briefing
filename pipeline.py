@@ -49,12 +49,12 @@ SOURCES = [
     },
     {
         "name": "The Points Guy",
-        "url": "https://thepointsguy.com/news/airlines/feed/",
+        "url": "https://thepointsguy.com/news/feed/",
         "attribution": "The Points Guy",
     },
 ]
 
-FRESHNESS_HOURS = 28  # Slightly over 24h to handle timezone edge cases
+FRESHNESS_HOURS = 72  # Set to 72h for testing; change back to 28 once confirmed working
 
 ANTHROPIC_MODEL = "claude-sonnet-4-20250514"
 MAX_TOKENS = 4096
@@ -92,15 +92,37 @@ def fetch_feed(source: dict, cutoff: datetime) -> list[dict]:
         print(f"  ⚠ Failed: {e}")
         return []
 
+    print(f"    Feed returned {len(feed.entries)} total entries")
+
     articles = []
     for entry in feed.entries:
         pub_date = None
+        # Try feedparser's pre-parsed dates first
         for field in ("published_parsed", "updated_parsed"):
             parsed = getattr(entry, field, None)
             if parsed:
                 pub_date = datetime(*parsed[:6], tzinfo=timezone.utc)
                 break
-        if not pub_date or pub_date < cutoff:
+
+        # Fallback: parse the raw date string manually
+        if not pub_date:
+            from dateutil import parser as dateparser
+            for field in ("published", "updated"):
+                raw = getattr(entry, field, None)
+                if raw:
+                    try:
+                        pub_date = dateparser.parse(raw)
+                        if pub_date.tzinfo is None:
+                            pub_date = pub_date.replace(tzinfo=timezone.utc)
+                        break
+                    except:
+                        pass
+
+        if not pub_date:
+            print(f"    ⚠ Skipping (no date): {entry.get('title', 'Untitled')}")
+            continue
+
+        if pub_date < cutoff:
             continue
 
         content_html = ""
