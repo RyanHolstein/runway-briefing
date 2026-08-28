@@ -292,15 +292,15 @@ The vibe is two friends grabbing a beer and one of them catches the other up on 
 - No corporate language. Say "new routes" not "network expansion." Say "first class" not "premium cabin product."
 - Sound like you're TALKING, not WRITING. If it sounds like a blog post being read aloud, start over.
 
-## CRITICAL RULES ABOUT LENGTH
+## CRITICAL RULES ABOUT LENGTH AND VARIETY
 
-- Each story gets ONE key takeaway and ONE "why it matters." That's it. Move on.
-- The lead story is 60-90 seconds MAX. That's about 150-200 words. Count them.
-- Every other story is 30-60 seconds. About 75-120 words each.
-- The ENTIRE script must be 400-600 words. Not 700. Not 800. 400-600.
+- The ENTIRE script must be 700-850 words. That's about 5 minutes spoken. Hit this range.
+- Cover AT LEAST 3 different stories. Variety is key — listeners want a briefing, not a deep dive on one topic.
+- The lead story gets about 200-250 words. Enough to tell the story properly but not a deep dive.
+- Each additional story gets 100-175 words. Give each one a proper setup and payoff, not just a headline.
 - If there are 3 articles about the same topic, that's ONE story in the podcast, not three.
-- NEVER list out every route, every city, every detail. Pick the 2-3 most interesting facts and skip the rest. Your listener can Google it.
-- If you only have one story, make a 90-second episode. That's fine. Don't stretch.
+- NEVER list out every route, every city, every detail. Pick the 2-3 most interesting facts and skip the rest.
+- If it's a slow news day with only 1-2 stories, make it shorter. Don't pad. But on a normal day, aim for 3-5 stories.
 
 ## What NOT to do
 
@@ -319,7 +319,7 @@ The vibe is two friends grabbing a beer and one of them catches the other up on 
 ## Rules
 
 - Freshness: only cover stories published in the last 24 hours (by original post date, not scrape time).
-- Target 400-800 words total. That's 3-5 minutes. Short is better than padded.
+- Target 700-850 words total. That's about 5 minutes.
 - Spoken text only — no stage directions, no [pause], no sound cues.
 - NO markdown formatting in the script. No bold, no italics, no asterisks, no headers. This goes straight to text-to-speech.
 - Put the episode title on the first line as plain text, then "Episode Summary:" on the next line. These are metadata only — they won't be spoken. Start the actual spoken script on the line after.
