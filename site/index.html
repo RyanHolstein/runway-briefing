@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Runway Briefing</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .container { max-width: 600px; padding: 3rem 2rem; text-align: center; }
+    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #fff; }
+    .tagline { font-size: 1.1rem; color: #888; margin-bottom: 2rem; }
+    .subscribe { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+    .subscribe a { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 2rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: transform 0.15s; }
+    .subscribe a:hover { transform: scale(1.05); }
+    .spotify { background: #1DB954; color: #fff; }
+    .apple { background: #fff; color: #000; }
+    .rss { background: #f90; color: #fff; }
+    .feed-link { margin-top: 2rem; }
+    .feed-link a { color: #666; font-size: 0.85rem; text-decoration: none; }
+    .feed-link a:hover { color: #999; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Runway Briefing</h1>
+    <p class="tagline">Your daily five-minute download on everything happening in the skies.</p>
+    <div class="subscribe">
+      <a href="#" class="spotify">Listen on Spotify</a>
+      <a href="#" class="apple">Listen on Apple Podcasts</a>
+      <a href="feed.xml" class="rss">RSS Feed</a>
+    </div>
+    <div class="feed-link">
+      <a href="feed.xml">feed.xml</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+name: Daily Episode
+
+on:
+  schedule:
+    # Runs every day at 10:00 UTC (6am ET / 3am PT)
+    # Adjust to whenever you want your episode to drop
+    - cron: "0 10 * * *"
+  workflow_dispatch: # Manual trigger from GitHub UI
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history so we can push back
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
+          PODCAST_HOST_URL: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          PODCAST_IMAGE_URL: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/cover.jpg"
+          SITE_DIR: "site"
+        run: python pipeline.py
+
+      - name: Check if episode was generated
+        id: check
+        run: |
+          if [ -f skip_episode ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push new episode
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          git config user.name "Runway Briefing Bot"
+          git config user.email "bot@runway-briefing"
+          git add site/
+          git commit -m "🎙️ Episode $(date +%Y-%m-%d)" || echo "No changes"
+          git push
+
+  deploy:
+    needs: generate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: main  # Pull latest after the generate job pushed
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload to Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
