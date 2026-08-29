@@ -571,14 +571,18 @@ def generate_email_digest(articles: list[dict]) -> str:
         print("  Skipping email: no ANTHROPIC_API_KEY")
         return ""
 
+    # Cap at 30 articles to avoid output truncation
+    digest_articles = articles[:30]
+    print(f"  Categorizing {len(digest_articles)} articles...")
+
     client = anthropic.Anthropic(api_key=api_key)
     article_text = "\n\n".join(
-        f"Source: {a['source']}\nTitle: {a['title']}\nURL: {a['url']}\nContent: {a.get('text', '')[:500]}"
-        for a in articles
+        f"Source: {a['source']}\nTitle: {a['title']}\nURL: {a['url']}\nContent: {a.get('text', '')[:300]}"
+        for a in digest_articles
     )
 
     message = client.messages.create(
-        model=ANTHROPIC_MODEL,
+        model="claude-haiku-4-5-20251001",
         max_tokens=8192,
         system=EMAIL_DIGEST_PROMPT,
         messages=[{"role": "user", "content": f"Here are today's articles:\n\n{article_text}"}],
@@ -710,16 +714,18 @@ def upload_to_buzzsprout(audio_path: Path, title: str, description: str, episode
     with open(audio_path, "rb") as f:
         resp = requests.post(
             f"https://www.buzzsprout.com/api/{podcast_id}/episodes.json",
-            headers={"Authorization": f"Token token={api_key}"},
+            headers={
+                "Authorization": f"Token token={api_key}",
+                "User-Agent": "RunwayBriefing/1.0",
+            },
             data={
                 "title": title,
                 "description": description,
                 "published_at": f"{episode_date}T10:00:00-04:00",
                 "private": "false",
-                "email_content_from_summary": "true",
             },
             files={"audio_file": (audio_path.name, f, "audio/mpeg")},
-            timeout=120,
+            timeout=180,
         )
 
     if resp.status_code in (200, 201):
