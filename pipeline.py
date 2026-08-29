@@ -354,10 +354,18 @@ The vibe is two friends grabbing a beer and one of them catches the other up on 
 - Don't use transitions like "Now let's turn our attention to..." — just go. "So, American."
 - Never use: "genuinely", "notably", "frankly", "consequential", "let's pump the brakes", "let's be honest"
 
+## Story selection priority (pick the best 3-5 from what you're given)
+
+1. BREAKING NEWS — new route announcements, mergers, airline launches/shutdowns, major incidents
+2. AIRLINE STRATEGY — fleet orders, hub changes, competitive moves, earnings that reveal strategy
+3. STORIES COVERED BY MULTIPLE SOURCES — if 2+ sources wrote about it, it's worth covering
+4. REGULATION & POLICY — FAA actions, DOT rulings, antitrust, slot decisions
+5. SKIP: listicles, "best credit cards for travel", deal roundups, points/miles tips, generic travel advice. These aren't news.
+
 ## Structure
 
 1. **Intro** — Start with: "Hey, welcome to Runway Briefing for [day of week], [date]. Let's get into it." No cold open, no teaser hook. Just say hi and go.
-2. **Stories** — Cover each story in 45-90 seconds. Lead with the biggest. Hit 2-4 stories total. Keep it moving.
+2. **Stories** — Cover each story in 45-90 seconds. Lead with the biggest. Hit 3-5 stories total. Keep it moving.
 3. **Sign-off** — "That's your briefing for today. If you're enjoying it, hit subscribe. See you tomorrow."
 
 ## Rules
@@ -641,11 +649,13 @@ def generate_email_digest(articles: list[dict]) -> str:
     return html
 
 
-def send_email(subject: str, html_body: str, host_url: str):
-    """Send the digest email via Gmail SMTP."""
+def send_email(subject: str, html_body: str, host_url: str, audio_path: Path = None):
+    """Send the digest email via Gmail SMTP, optionally attaching the MP3."""
     import smtplib
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
+    from email.mime.base import MIMEBase
+    from email import encoders
 
     gmail_address = os.environ.get("GMAIL_ADDRESS")
     gmail_password = os.environ.get("GMAIL_APP_PASSWORD")
@@ -655,11 +665,21 @@ def send_email(subject: str, html_body: str, host_url: str):
         print("  Skipping email: GMAIL_ADDRESS or GMAIL_APP_PASSWORD not set")
         return
 
-    msg = MIMEMultipart("alternative")
+    msg = MIMEMultipart("mixed")
     msg["Subject"] = subject
     msg["From"] = f"Runway Briefing <{gmail_address}>"
     msg["To"] = recipient
     msg.attach(MIMEText(html_body, "html"))
+
+    # Attach MP3 if available
+    if audio_path and audio_path.exists():
+        with open(audio_path, "rb") as f:
+            audio_part = MIMEBase("audio", "mpeg")
+            audio_part.set_payload(f.read())
+            encoders.encode_base64(audio_part)
+            audio_part.add_header("Content-Disposition", f"attachment; filename={audio_path.name}")
+            msg.attach(audio_part)
+            print(f"  ✓ Attached {audio_path.name}")
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(gmail_address, gmail_password)
@@ -766,7 +786,7 @@ def main():
         digest_html = generate_email_digest(articles)
         if digest_html:
             today_nice = datetime.now().strftime("%a, %b %d")
-            send_email(f"Runway Briefing — {today_nice}", digest_html, host_url)
+            send_email(f"Runway Briefing — {today_nice}", digest_html, host_url, audio_path)
     except Exception as e:
         print(f"  Warning: Email failed ({e}), continuing...")
 
