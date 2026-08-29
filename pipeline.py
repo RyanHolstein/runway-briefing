@@ -562,7 +562,7 @@ def generate_email_digest(articles: list[dict]) -> str:
 
     client = anthropic.Anthropic(api_key=api_key)
     article_text = "\n\n".join(
-        f"Source: {a['source']}\nTitle: {a['title']}\nURL: {a['url']}\nContent: {a.get('summary', '')[:500]}"
+        f"Source: {a['source']}\nTitle: {a['title']}\nURL: {a['url']}\nContent: {a.get('text', '')[:500]}"
         for a in articles
     )
 
@@ -585,11 +585,18 @@ def generate_email_digest(articles: list[dict]) -> str:
         # Strip markdown code fences if present
         cleaned = re.sub(r"^```(?:json)?\s*", "", response_text.strip())
         cleaned = re.sub(r"\s*```$", "", cleaned)
+        # Try to extract JSON array if there's extra text around it
+        json_match = re.search(r"\[[\s\S]*\]", cleaned)
+        if json_match:
+            cleaned = json_match.group(0)
         categorized = json.loads(cleaned)
-    except json.JSONDecodeError:
+        print(f"  ✓ Categorized {len(categorized)} articles")
+    except json.JSONDecodeError as e:
+        print(f"  Warning: Could not parse digest JSON ({e})")
+        print(f"  Raw response (first 500 chars): {response_text[:500]}")
         print("  Warning: Could not parse digest JSON, using flat list")
         categorized = [
-            {"category": "TODAY'S STORIES", "title": a["title"], "summary": a.get("summary", "")[:200],
+            {"category": "TODAY'S STORIES", "title": a["title"], "summary": a.get("text", "")[:200],
              "url": a["url"], "source": a["source"]}
             for a in articles
         ]
@@ -615,11 +622,17 @@ def generate_email_digest(articles: list[dict]) -> str:
 <ul style="list-style:none;padding:0;margin:8px 0;">{items_html}</ul>
 """
 
+    # Build SOURCES section from unique sources
+    unique_sources = sorted(set(a["source"] for a in articles))
+    sources_html = "".join(f'<li style="margin-bottom:4px;color:#666;font-size:13px;">{s}</li>\n' for s in unique_sources)
+
     html = f"""<html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:640px;margin:0 auto;padding:20px;color:#333;">
 <h2 style="margin-bottom:4px;">Runway Briefing</h2>
 <p style="color:#888;margin-top:0;">Today's bundle for {today}.</p>
 <h3 style="color:#333;font-size:14px;text-transform:uppercase;letter-spacing:1px;">TODAY'S RUNDOWN</h3>
 {sections_html}
+<h3 style="color:#333;border-bottom:1px solid #ddd;padding-bottom:4px;margin-top:24px;font-size:14px;text-transform:uppercase;letter-spacing:1px;">SOURCES</h3>
+<ul style="list-style:none;padding:0;margin:8px 0;">{sources_html}</ul>
 <hr style="border:none;border-top:1px solid #eee;margin:24px 0;">
 <p style="color:#888;font-size:12px;">Runway Briefing — your daily aviation news digest.<br>
 <a href="https://ryanholstein.github.io/runway-briefing/episodes/{datetime.now().strftime('%Y-%m-%d')}.mp3" style="color:#1a73e8;">Listen to today's episode</a></p>
