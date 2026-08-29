@@ -14,6 +14,14 @@
     <atom:link href="https://RyanHolstein.github.io/runway-briefing/feed.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title>Runway Briefing — Saturday, August 29, 2026</title>
+      <description><![CDATA[A United engine emergency diverts an LA-to-New York flight to Vegas, Boeing's engineers reject a contract with a strike looming, Scott Kirby predicts American will bail on Chicago, plus Frontier reshuffles its loyalty program and United's new A321XLR quietly makes its debut... domestically.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/2026-08-29.mp3" length="3917575" type="audio/mpeg"/>
+      <guid isPermaLink="false">f7d38c0935d8a37d690eb60985e7636b</guid>
+      <pubDate>Sat, 29 Aug 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
       <title>Runway Briefing — United's Rough Day, Kirby's Chicago Prediction, and Frontier Plays Both Sides</title>
       <description><![CDATA[A United flight from LA to Newark turns into a two-stop odyssey after an engine issue forces a diversion to Vegas. United's CEO doubles down on his prediction that American will eventually bail on Chicago. Frontier makes Diamond status easier to reach while quietly gutting everyone else's perks. Plus, Boeing's engineers just said "no thanks" to the latest contract, and two air traffic controllers are getting fired over the LaGuardia crash.]]></description>
       <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/2026-08-28.mp3" length="3398052" type="audio/mpeg"/>
