@@ -579,7 +579,7 @@ def generate_email_digest(articles: list[dict]) -> str:
 
     message = client.messages.create(
         model=ANTHROPIC_MODEL,
-        max_tokens=4096,
+        max_tokens=8192,
         system=EMAIL_DIGEST_PROMPT,
         messages=[{"role": "user", "content": f"Here are today's articles:\n\n{article_text}"}],
     )
