@@ -104,7 +104,7 @@ ELEVENLABS_MODEL = "eleven_multilingual_v2"
 DEFAULT_VOICE_ID = "pNInz6obpgDQGcFmaJgB"  # "Adam" — change in GitHub secrets
 
 PODCAST_TITLE = "Runway Briefing"
-PODCAST_DESCRIPTION = "Your daily five-minute download on everything happening in the skies."
+PODCAST_DESCRIPTION = "Your daily five-minute briefing on the aviation industry — new routes, airline strategy, fleet orders, and the moves shaping how we fly. Delivered daily like a friend catching you up over coffee."
 PODCAST_AUTHOR = "Runway Briefing"
 PODCAST_LANGUAGE = "en"
 PODCAST_CATEGORY = "News"
@@ -374,7 +374,10 @@ The vibe is two friends grabbing a beer and one of them catches the other up on 
 - Target 700-850 words total. That's about 5 minutes.
 - Spoken text only — no stage directions, no [pause], no sound cues.
 - NO markdown formatting in the script. No bold, no italics, no asterisks, no headers. This goes straight to text-to-speech.
-- Put the episode title on the first line as plain text, then "Episode Summary:" on the next line. These are metadata only — they won't be spoken. Start the actual spoken script on the line after.
+- The first 3 lines are metadata (not spoken). Format them EXACTLY like this:
+  Line 1: Episode title — specific to today's stories, punchy, references 2-3 key topics (e.g. "American's Routes Fall Flat, United Goes Big, and Airbus Can't Deliver")
+  Line 2: Episode Summary: A 2-3 sentence description of what's in this episode. Written for a podcast listing — make someone want to hit play.
+  Line 3: Start the actual spoken script here.
 - Credit sources casually: "Brett over at Cranky Flier pointed out..." / "Zach Griff had a good piece on this..."
 - If it's a slow news day with only 1-2 stories, make it a 2-minute episode. That's fine.
 - If a story was covered in a recent episode (listed below), don't repeat it unless there's a NEW development. If there is, say "update on something we covered yesterday..." — don't re-explain the whole thing.
@@ -689,6 +692,44 @@ def send_email(subject: str, html_body: str, host_url: str, audio_path: Path = N
 
 
 # ──────────────────────────────────────────────
+# Step 6: Upload to Buzzsprout
+# ──────────────────────────────────────────────
+
+def upload_to_buzzsprout(audio_path: Path, title: str, description: str, episode_date: str):
+    """Upload an episode to Buzzsprout via their API."""
+    api_key = os.environ.get("BUZZSPROUT_API_KEY")
+    podcast_id = os.environ.get("BUZZSPROUT_PODCAST_ID")
+
+    if not api_key or not podcast_id:
+        print("  Skipping Buzzsprout: BUZZSPROUT_API_KEY or BUZZSPROUT_PODCAST_ID not set")
+        return
+
+    print(f"  Uploading to Buzzsprout (podcast {podcast_id})...")
+
+    # Upload audio file
+    with open(audio_path, "rb") as f:
+        resp = requests.post(
+            f"https://www.buzzsprout.com/api/{podcast_id}/episodes.json",
+            headers={"Authorization": f"Token token={api_key}"},
+            data={
+                "title": title,
+                "description": description,
+                "published_at": f"{episode_date}T10:00:00-04:00",
+                "private": "false",
+                "email_content_from_summary": "true",
+            },
+            files={"audio_file": (audio_path.name, f, "audio/mpeg")},
+            timeout=120,
+        )
+
+    if resp.status_code in (200, 201):
+        ep_data = resp.json()
+        print(f"  ✓ Uploaded to Buzzsprout: {ep_data.get('title', title)}")
+    else:
+        print(f"  ⚠ Buzzsprout upload failed ({resp.status_code}): {resp.text[:300]}")
+
+
+# ──────────────────────────────────────────────
 # Main
 # ──────────────────────────────────────────────
 
@@ -790,10 +831,19 @@ def main():
     except Exception as e:
         print(f"  Warning: Email failed ({e}), continuing...")
 
-    # Step 6: Save to database
+    # Step 6: Upload to Buzzsprout
+    print("=" * 50)
+    print("STEP 6: Buzzsprout")
+    print("=" * 50)
+    try:
+        upload_to_buzzsprout(audio_path, ep_title, ep_summary, today_str)
+    except Exception as e:
+        print(f"  Warning: Buzzsprout upload failed ({e}), continuing...")
+
+    # Step 7: Save to database
     if conn:
         print("=" * 50)
-        print("STEP 6: Save to DB")
+        print("STEP 7: Save to DB")
         print("=" * 50)
         save_episode(conn, articles, ep_title, ep_summary)
         conn.close()
