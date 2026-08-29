@@ -4,7 +4,7 @@
      xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Runway Briefing</title>
-    <description>Your daily five-minute download on everything happening in the skies.</description>
+    <description>Your daily five-minute briefing on the aviation industry — new routes, airline strategy, fleet orders, and the moves shaping how we fly. Delivered daily like a friend catching you up over coffee.</description>
     <language>en</language>
     <itunes:author>Runway Briefing</itunes:author>
     <itunes:category text="News"/>
@@ -14,9 +14,9 @@
     <atom:link href="https://RyanHolstein.github.io/runway-briefing/feed.xml" rel="self" type="application/rss+xml"/>
     
     <item>
-      <title>Runway Briefing - Saturday, August 29, 2026</title>
-      <description><![CDATA[Delta's CEO wants to run with Singapore Airlines and Emirates, JetBlue's new first class comes with a side of shrinking economy legroom, Qantas retires the A380 early, and Nashville might just become "Dolly Parton International."]]></description>
-      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/2026-08-29.mp3" length="3738688" type="audio/mpeg"/>
+      <title>Episode Title: United and American Play Chicken Over Routes, Air Canada's Fancy New Jet Flops, and Frontier Guts Its Elites</title>
+      <description><![CDATA[United and American both dropped their summer route announcements this week, and things got a little spicy when United's CEO predicted American will eventually get run out of Chicago entirely. Plus, Air Canada's brand-new A321XLR couldn't hack its highest-profile route, Frontier takes another swing at its loyalty program, and Etihad has some explaining to do after a mid-air medical emergency.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/2026-08-29.mp3" length="3210388" type="audio/mpeg"/>
       <guid isPermaLink="false">f7d38c0935d8a37d690eb60985e7636b</guid>
       <pubDate>Sat, 29 Aug 2026 00:00:00 +0000</pubDate>
       <itunes:episodeType>full</itunes:episodeType>
