@@ -37,6 +37,7 @@ jobs:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVENLABS_VOICE_A: ${{ secrets.ELEVENLABS_VOICE_A }}
           ELEVENLABS_VOICE_B: ${{ secrets.ELEVENLABS_VOICE_B }}
+          ELEVENLABS_DICT_ID: ${{ secrets.ELEVENLABS_DICT_ID }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           BUZZSPROUT_API_KEY: ${{ secrets.BUZZSPROUT_API_KEY }}
           BUZZSPROUT_PODCAST_ID: ${{ secrets.BUZZSPROUT_PODCAST_ID }}
