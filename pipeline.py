@@ -100,7 +100,7 @@ FRESHNESS_HOURS = 28
 ANTHROPIC_MODEL = "claude-sonnet-5"
 MAX_TOKENS = 16000
 
-ELEVENLABS_MODEL = "eleven_v3"
+ELEVENLABS_MODEL = "eleven_flash_v2"
 DEFAULT_VOICE_ID = "pNInz6obpgDQGcFmaJgB"  # "Adam" — change in GitHub secrets
 
 PODCAST_TITLE = "Runway Briefing"
