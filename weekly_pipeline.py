@@ -26,8 +26,8 @@ ANTHROPIC_MODEL = "claude-sonnet-5"
 MAX_TOKENS = 16000
 
 ELEVENLABS_MODEL = "eleven_v3"
-DEFAULT_VOICE_A = "pNInz6obpgDQGcFmaJgB"  # "Adam" — Host A
-DEFAULT_VOICE_B = "ErXwobaYiN019PkySvjV"  # "Antoni" — Host B (change in secrets)
+DEFAULT_VOICE_A = "c6SfcYrb2t09NHXiT80T"  # Ryan — Host
+DEFAULT_VOICE_B = "uYXf8XasLslADfZ2MB4u"  # Hope — Guest
 
 PODCAST_TITLE = "Runway Briefing"
 
@@ -190,8 +190,8 @@ This week's daily episodes:
 WEEKLY_SCRIPT_PROMPT = """You write scripts for "Runway Briefing Weekly", a conversational deep-dive podcast where two hosts discuss the biggest aviation story of the week.
 
 ## The Hosts
-- HOST A ("Alex"): The aviation nerd. Follows every fleet order, knows airline history, has strong opinions. More analytical.
-- HOST B ("Sam"): The curious generalist. Asks the questions a smart listener would ask. Good at analogies. Keeps things accessible.
+- RYAN (Host): The aviation nerd. Follows every fleet order, knows airline history, has strong opinions. More analytical. This is his podcast.
+- HOPE (Guest): The curious generalist. Asks the questions a smart listener would ask. Good at analogies. Keeps things accessible. She's a regular on the weekly episodes.
 
 ## How it should SOUND
 
@@ -220,16 +220,16 @@ Use your knowledge of aviation history, airline economics, fleet strategy, regul
 ## CRITICAL RULES
 
 - Script must be 2000-2500 words. That's about 15 minutes spoken.
-- Format each line as: "ALEX: text" or "SAM: text"
+- Format each line as: "RYAN: text" or "HOPE: text"
 - NO stage directions, NO sound cues, NO [laughs] or [pause]
 - NO markdown formatting. No bold, italic, asterisks, or headers. Straight to TTS.
 - The first 3 lines are metadata (not spoken):
   Line 1: Episode title — e.g. "Weekly Deep Dive: Why Qantas Retiring the A380 Changes Everything"
   Line 2: Episode Summary: 2-3 sentences for the podcast listing.
   Line 3+: Start the dialogue.
-- Alex opens: "Hey, welcome to Runway Briefing Weekly. I'm Alex."
-- Sam: "And I'm Sam. So this week we're digging into [topic]..."
-- End naturally: "All right, that's the deep dive for this week. We'll be back Monday with the daily. Later."
+- Ryan opens: "Hey, welcome to Runway Briefing Weekly. I'm Ryan, and I've got Hope with me."
+- Hope: "Hey! So this week we're digging into [topic]..."
+- End naturally: "All right, that's the deep dive for this week. We'll be back tomorrow with the daily. See you then."
 - Don't rehash every headline from the week. Pick the ONE topic and go deep.
 - Never use: "genuinely", "notably", "frankly", "consequential", "let's pump the brakes", "let's be honest"
 
@@ -349,7 +349,7 @@ def parse_dialogue(script: str) -> list[dict]:
             metadata_done = True
 
         # Parse speaker lines
-        match = re.match(r"^(ALEX|SAM):\s*(.+)", stripped, re.IGNORECASE)
+        match = re.match(r"^(RYAN|HOPE):\s*(.+)", stripped, re.IGNORECASE)
         if match:
             speaker = match.group(1).upper()
             text = match.group(2).strip()
@@ -374,8 +374,8 @@ def generate_weekly_audio(script: str, output_path: Path) -> Path:
     voice_a = os.environ.get("ELEVENLABS_VOICE_A", os.environ.get("ELEVENLABS_VOICE_ID", DEFAULT_VOICE_A))
     voice_b = os.environ.get("ELEVENLABS_VOICE_B", DEFAULT_VOICE_B)
 
-    print(f"  Voice A (Alex): {voice_a}")
-    print(f"  Voice B (Sam): {voice_b}")
+    print(f"  Voice A (Ryan): {voice_a}")
+    print(f"  Voice B (Hope): {voice_b}")
 
     # Get pronunciation dictionary
     pdict = get_or_create_pronunciation_dict()
@@ -404,7 +404,7 @@ def generate_weekly_audio(script: str, output_path: Path) -> Path:
             text = apply_phonetics(text)
 
         # Pick voice
-        voice_id = voice_a if speaker == "ALEX" else voice_b
+        voice_id = voice_a if speaker == "RYAN" else voice_b
 
         print(f"  [{i+1}/{len(dialogue)}] {speaker}: {text[:60]}...")
 

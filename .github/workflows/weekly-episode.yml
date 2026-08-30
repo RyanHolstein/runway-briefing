@@ -2,8 +2,8 @@ name: Weekly Deep Dive
 
 on:
   schedule:
-    # Every Friday at 14:00 UTC (10am ET) — after a full week of daily episodes
-    - cron: "0 14 * * 5"
+    # Every Monday at 12:00 UTC (8am ET) — weekly deep dive to start the week
+    - cron: "0 12 * * 1"
   workflow_dispatch: # Manual trigger from GitHub UI
 
 permissions:
