@@ -111,6 +111,145 @@ PODCAST_CATEGORY = "News"
 
 
 # ──────────────────────────────────────────────
+# Pronunciation / Phonetics Map
+# ──────────────────────────────────────────────
+# ElevenLabs sometimes botches aviation jargon.
+# Keys are case-insensitive search targets; values are
+# the phonetic spelling ElevenLabs should read instead.
+
+PHONETICS_MAP = {
+    # Airlines
+    "Qantas": "Kwontus",
+    "LATAM": "La-tam",
+    "Ryanair": "Ryan-air",
+    "easyJet": "easy-jet",
+    "Wizz Air": "Wiz Air",
+    "LOT Polish": "Lot Polish",
+    "SAS": "S A S",
+    "TAP Air Portugal": "Tap Air Portugal",
+    "PLAY": "Play",
+    "Cebu Pacific": "Seh-boo Pacific",
+    "IndiGo": "Indi-Go",
+    "Vueling": "Voo-eh-ling",
+    "Cathay Pacific": "Ka-thay Pacific",
+    "Hainan Airlines": "High-nan Airlines",
+    "EVA Air": "Eh-vah Air",
+    "Asiana": "Ah-see-ah-nah",
+    "Avianca": "Ah-vee-ahn-ka",
+    "Volaris": "Vo-lah-ris",
+    "WestJet": "West-Jet",
+
+    # Aircraft
+    "A220": "A two-twenty",
+    "A320": "A three-twenty",
+    "A321": "A three twenty-one",
+    "A321XLR": "A three twenty-one X L R",
+    "A330": "A three-thirty",
+    "A330neo": "A three-thirty neo",
+    "A340": "A three-forty",
+    "A350": "A three-fifty",
+    "A380": "A three-eighty",
+    "737 MAX": "seven thirty-seven Max",
+    "737-800": "seven thirty-seven eight hundred",
+    "757": "seven fifty-seven",
+    "767": "seven sixty-seven",
+    "777": "triple seven",
+    "777X": "triple seven X",
+    "787": "seven eighty-seven",
+    "747": "seven forty-seven",
+    "E175": "E one seventy-five",
+    "E190": "E one-ninety",
+    "E195": "E one ninety-five",
+    "CRJ": "C R J",
+    "ATR 72": "A T R seventy-two",
+    "ATR 42": "A T R forty-two",
+    "C919": "C nine-nineteen",
+    "MC-21": "M C twenty-one",
+    "MAX 10": "Max ten",
+    "MAX 8": "Max eight",
+    "MAX 9": "Max nine",
+
+    # Engines
+    "CFM LEAP": "C F M Leap",
+    "PW1100G": "Pratt and Whitney eleven hundred G",
+    "GTF": "G T F",
+    "GEnx": "G E n x",
+    "LEAP-1A": "Leap one A",
+    "LEAP-1B": "Leap one B",
+    "Trent XWB": "Trent X W B",
+
+    # Organizations & Regulators
+    "FAA": "F A A",
+    "EASA": "Ee-ah-sah",
+    "IATA": "Eye-ah-tah",
+    "ICAO": "Eye-kay-oh",
+    "NTSB": "N T S B",
+    "DOT": "D O T",
+    "TSA": "T S A",
+
+    # Airports (IATA codes used in context)
+    "LAX": "L A X",
+    "JFK": "J F K",
+    "ORD": "O R D",
+    "DFW": "D F W",
+    "ATL": "A T L",
+    "SFO": "S F O",
+    "LHR": "L H R",
+    "CDG": "C D G",
+    "NRT": "N R T",
+    "HND": "H N D",
+    "SIN": "sin",
+    "DXB": "D X B",
+    "AMS": "A M S",
+    "FRA": "F R A",
+    "MUC": "M U C",
+    "IST": "I S T",
+
+    # Industry terms
+    "ETOPS": "ee-tops",
+    "RPK": "R P K",
+    "ASK": "A S K",
+    "CASM": "caz-um",
+    "RASM": "raz-um",
+    "PRASM": "pee-raz-um",
+    "IPO": "I P O",
+    "M&A": "M and A",
+    "CEO": "C E O",
+    "CFO": "C F O",
+    "DOJ": "D O J",
+    "NMA": "N M A",
+    "MRO": "M R O",
+    "AOG": "A O G",
+    "ULCC": "U L C C",
+    "LCC": "L C C",
+    "FSC": "F S C",
+
+    # People
+    "Akbar Al Baker": "Ak-bar Al Bah-ker",
+    "Guillaume Faury": "Gee-yohm For-ee",
+    "Willie Walsh": "Willie Walsh",
+    "Luis Gallego": "Loo-ees Gah-yay-go",
+    "Pieter Elbers": "Pee-ter El-bers",
+
+    # Misc
+    "en route": "on route",
+    "codeshare": "code-share",
+    "widebody": "wide-body",
+    "narrowbody": "narrow-body",
+    "transcon": "trans-con",
+}
+
+
+def apply_phonetics(text: str) -> str:
+    """Replace aviation jargon with TTS-friendly pronunciations."""
+    for term, phonetic in PHONETICS_MAP.items():
+        # Use word-boundary-aware replacement to avoid partial matches
+        pattern = re.compile(re.escape(term), re.IGNORECASE)
+        text = pattern.sub(phonetic, text)
+    return text
+
+
+# ──────────────────────────────────────────────
 # Step 1: Scrape RSS Feeds
 # ──────────────────────────────────────────────
 
@@ -337,12 +476,36 @@ The vibe is two friends grabbing a beer and one of them catches the other up on 
 - No corporate language. Say "new routes" not "network expansion." Say "first class" not "premium cabin product."
 - Sound like you're TALKING, not WRITING. If it sounds like a blog post being read aloud, start over.
 
+## CONTEXT AND ANALYSIS — THIS IS CRITICAL
+
+Don't just report WHAT happened. Explain WHY it matters and what it means for the industry. Use your knowledge of aviation history to add context. This is what separates a good briefing from a headline reader.
+
+For every major story, answer at least one of these:
+- Why is this a big deal? What's the historical context?
+- How much money is at stake? What did the airline invest?
+- What does this signal about where the industry is going?
+- Who wins and who loses from this?
+- How does this connect to larger trends (consolidation, fleet modernization, route competition, etc.)?
+
+Examples of good context:
+- "Qantas is retiring the A380 early. Remember, they bet huge on those planes — each one cost around $400 million. But twin-engine jets like the 787 can do the same routes for way less fuel, so the math just doesn't work anymore."
+- "United adding 10 new international cities matters because they're basically trying to build a fortress in the transatlantic market before the joint ventures lock everyone else out."
+- "This is the third low-cost carrier to fold this year. The post-pandemic bounce is over, fuel is expensive, and the ultra-low-cost model might just be broken."
+
+## SOUNDING HUMAN
+
+- Have opinions. Say "I think" or "honestly" or "here's what bugs me about this." You're not a neutral reporter — you're someone who follows this industry closely and has takes.
+- Callback to previous episodes when relevant: "Remember when we talked about the A321XLR delays last week? Well, it's getting worse."
+- Occasionally throw in small personal touches: "I was actually on that route last month" or "I've been watching this one for a while."
+- Vary your energy. Not every story needs the same delivery. Some are exciting, some are frustrating, some are just weird.
+- Use rhetorical questions: "So what happens when three airlines are all fighting over the same transatlantic slots? Nothing good."
+
 ## CRITICAL RULES ABOUT LENGTH AND VARIETY
 
 - The ENTIRE script must be 700-850 words. That's about 5 minutes spoken. Hit this range.
 - Cover AT LEAST 3 different stories. Variety is key — listeners want a briefing, not a deep dive on one topic.
-- The lead story gets about 200-250 words. Enough to tell the story properly but not a deep dive.
-- Each additional story gets 100-175 words. Give each one a proper setup and payoff, not just a headline.
+- The lead story gets about 200-250 words. Enough to tell the story AND its context, not just the headline.
+- Each additional story gets 100-175 words. Give each one a proper setup, the news, and why it matters.
 - If there are 3 articles about the same topic, that's ONE story in the podcast, not three.
 - NEVER list out every route, every city, every detail. Pick the 2-3 most interesting facts and skip the rest.
 - If it's a slow news day with only 1-2 stories, make it shorter. Don't pad. But on a normal day, aim for 3-5 stories.
@@ -353,6 +516,7 @@ The vibe is two friends grabbing a beer and one of them catches the other up on 
 - Don't rehash source articles. Distill them.
 - Don't use transitions like "Now let's turn our attention to..." — just go. "So, American."
 - Never use: "genuinely", "notably", "frankly", "consequential", "let's pump the brakes", "let's be honest"
+- Don't just report facts without context. "United announced new routes" is bad. "United is making a play for transatlantic dominance and here's why it matters" is good.
 
 ## Story selection priority (pick the best 3-5 from what you're given)
 
@@ -452,6 +616,9 @@ def generate_audio(script: str, output_path: Path) -> Path:
     clean = re.sub(r"^#{1,6}\s+", "", clean, flags=re.MULTILINE)  # headers
     clean = re.sub(r"^---+$", "", clean, flags=re.MULTILINE)  # dividers
     clean = re.sub(r"\n{3,}", "\n\n", clean)
+
+    # Apply pronunciation fixes for aviation jargon
+    clean = apply_phonetics(clean)
 
     resp = requests.post(
         f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}",
