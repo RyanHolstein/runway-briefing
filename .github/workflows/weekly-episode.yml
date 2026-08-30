@@ -1,10 +1,9 @@
-name: Daily Episode
+name: Weekly Deep Dive
 
 on:
   schedule:
-    # Runs every day at 10:00 UTC (6am ET / 3am PT)
-    # Adjust to whenever you want your episode to drop
-    - cron: "0 10 * * *"
+    # Every Friday at 14:00 UTC (10am ET) — after a full week of daily episodes
+    - cron: "0 14 * * 5"
   workflow_dispatch: # Manual trigger from GitHub UI
 
 permissions:
@@ -19,30 +18,32 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Full history so we can push back
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      - name: Run pipeline
+      - name: Run weekly pipeline
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-          ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
+          ELEVENLABS_VOICE_A: ${{ secrets.ELEVENLABS_VOICE_A }}
+          ELEVENLABS_VOICE_B: ${{ secrets.ELEVENLABS_VOICE_B }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
-          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           BUZZSPROUT_API_KEY: ${{ secrets.BUZZSPROUT_API_KEY }}
           BUZZSPROUT_PODCAST_ID: ${{ secrets.BUZZSPROUT_PODCAST_ID }}
+          WEEKLY_ARTWORK_URL: ${{ secrets.WEEKLY_ARTWORK_URL }}
           PODCAST_HOST_URL: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
-          PODCAST_IMAGE_URL: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/cover.png"
           SITE_DIR: "site"
-        run: python pipeline.py
+        run: python weekly_pipeline.py
 
       - name: Check if episode was generated
         id: check
@@ -59,7 +60,7 @@ jobs:
           git config user.name "Runway Briefing Bot"
           git config user.email "bot@runway-briefing"
           git add site/
-          git commit -m "🎙️ Episode $(date +%Y-%m-%d)" || echo "No changes"
+          git commit -m "🎙️ Weekly Deep Dive $(date +%Y-%m-%d)" || echo "No changes"
           git push
 
   deploy:
@@ -72,7 +73,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          ref: main  # Pull latest after the generate job pushed
+          ref: main
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

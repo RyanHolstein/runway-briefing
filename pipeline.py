@@ -962,6 +962,8 @@ def main():
     lines = [l.strip() for l in script.strip().split("\n") if l.strip()]
     title_match = re.search(r"\*\*\"?(.+?)\"?\*\*", script)
     ep_title = title_match.group(1) if title_match else (lines[0] if lines else f"Runway Briefing — {today_str}")
+    # Strip metadata prefixes like "Episode Title: "
+    ep_title = re.sub(r"^Episode\s+Title:\s*", "", ep_title, flags=re.IGNORECASE).strip()
     summary_match = re.search(r"Episode Summary:\s*(.+)", script)
     ep_summary = summary_match.group(1).strip() if summary_match else ""
 

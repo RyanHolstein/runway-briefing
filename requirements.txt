@@ -4,3 +4,4 @@ beautifulsoup4>=4.12
 anthropic>=0.40
 python-dateutil>=2.9
 psycopg2-binary>=2.9
+pydub>=0.25
