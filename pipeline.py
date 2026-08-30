@@ -100,7 +100,7 @@ FRESHNESS_HOURS = 28
 ANTHROPIC_MODEL = "claude-sonnet-5"
 MAX_TOKENS = 16000
 
-ELEVENLABS_MODEL = "eleven_multilingual_v2"
+ELEVENLABS_MODEL = "eleven_v3"
 DEFAULT_VOICE_ID = "pNInz6obpgDQGcFmaJgB"  # "Adam" — change in GitHub secrets
 
 PODCAST_TITLE = "Runway Briefing"
@@ -111,141 +111,212 @@ PODCAST_CATEGORY = "News"
 
 
 # ──────────────────────────────────────────────
-# Pronunciation / Phonetics Map
+# Pronunciation Dictionary (ElevenLabs API)
 # ──────────────────────────────────────────────
-# ElevenLabs sometimes botches aviation jargon.
-# Keys are case-insensitive search targets; values are
-# the phonetic spelling ElevenLabs should read instead.
+# Uses ElevenLabs Pronunciation Dictionary API with IPA phonemes.
+# The dictionary is created once and reused via ELEVENLABS_DICT_ID env var.
+# If no dict ID is set, it creates one automatically on first run.
+#
+# Two rule types:
+#   "phoneme" — IPA pronunciation (precise, works with eleven_v3)
+#   "alias"   — text substitution (simpler, works with all models)
 
-PHONETICS_MAP = {
-    # Airlines
-    "Qantas": "Kwontus",
-    "LATAM": "La-tam",
-    "Ryanair": "Ryan-air",
-    "easyJet": "easy-jet",
-    "Wizz Air": "Wiz Air",
-    "LOT Polish": "Lot Polish",
-    "SAS": "S A S",
-    "TAP Air Portugal": "Tap Air Portugal",
-    "PLAY": "Play",
-    "Cebu Pacific": "Seh-boo Pacific",
-    "IndiGo": "Indi-Go",
-    "Vueling": "Voo-eh-ling",
-    "Cathay Pacific": "Ka-thay Pacific",
-    "Hainan Airlines": "High-nan Airlines",
-    "EVA Air": "Eh-vah Air",
-    "Asiana": "Ah-see-ah-nah",
-    "Avianca": "Ah-vee-ahn-ka",
-    "Volaris": "Vo-lah-ris",
-    "WestJet": "West-Jet",
+PRONUNCIATION_RULES = [
+    # ── Common words ElevenLabs botches ──
+    {"string_to_replace": "Atlantic", "type": "phoneme", "phoneme": "ətˈlæntɪk", "alphabet": "ipa"},
+    {"string_to_replace": "ask", "type": "phoneme", "phoneme": "ˈɑːsk", "alphabet": "ipa"},
+    {"string_to_replace": "registered", "type": "phoneme", "phoneme": "ˈredʒɪstəd", "alphabet": "ipa"},
+    {"string_to_replace": "record", "type": "phoneme", "phoneme": "ˈrekɔːd", "alphabet": "ipa"},
 
-    # Aircraft
-    "A220": "A two-twenty",
-    "A320": "A three-twenty",
-    "A321": "A three twenty-one",
-    "A321XLR": "A three twenty-one X L R",
-    "A330": "A three-thirty",
-    "A330neo": "A three-thirty neo",
-    "A340": "A three-forty",
-    "A350": "A three-fifty",
-    "A380": "A three-eighty",
-    "737 MAX": "seven thirty-seven Max",
-    "737-800": "seven thirty-seven eight hundred",
-    "757": "seven fifty-seven",
-    "767": "seven sixty-seven",
-    "777": "triple seven",
-    "777X": "triple seven X",
-    "787": "seven eighty-seven",
-    "747": "seven forty-seven",
-    "E175": "E one seventy-five",
-    "E190": "E one-ninety",
-    "E195": "E one ninety-five",
-    "CRJ": "C R J",
-    "ATR 72": "A T R seventy-two",
-    "ATR 42": "A T R forty-two",
-    "C919": "C nine-nineteen",
-    "MC-21": "M C twenty-one",
-    "MAX 10": "Max ten",
-    "MAX 8": "Max eight",
-    "MAX 9": "Max nine",
+    # ── Airlines ──
+    {"string_to_replace": "Qantas", "type": "phoneme", "phoneme": "ˈkwɒntəs", "alphabet": "ipa"},
+    {"string_to_replace": "LATAM", "type": "phoneme", "phoneme": "lɑːˈtæm", "alphabet": "ipa"},
+    {"string_to_replace": "Vueling", "type": "phoneme", "phoneme": "ˈbwelɪŋ", "alphabet": "ipa"},
+    {"string_to_replace": "Cathay Pacific", "type": "phoneme", "phoneme": "kæˈθeɪ pəˈsɪfɪk", "alphabet": "ipa"},
+    {"string_to_replace": "Hainan Airlines", "type": "phoneme", "phoneme": "ˈhaɪnæn ˈɛərlaɪnz", "alphabet": "ipa"},
+    {"string_to_replace": "EVA Air", "type": "phoneme", "phoneme": "ˈɛvə ɛər", "alphabet": "ipa"},
+    {"string_to_replace": "Asiana", "type": "phoneme", "phoneme": "ɑːsiˈɑːnə", "alphabet": "ipa"},
+    {"string_to_replace": "Avianca", "type": "phoneme", "phoneme": "ɑːviˈɑːŋkə", "alphabet": "ipa"},
+    {"string_to_replace": "Volaris", "type": "phoneme", "phoneme": "voˈlɑːrɪs", "alphabet": "ipa"},
+    {"string_to_replace": "Cebu Pacific", "type": "phoneme", "phoneme": "sɛˈbuː pəˈsɪfɪk", "alphabet": "ipa"},
+    {"string_to_replace": "Ryanair", "type": "phoneme", "phoneme": "ˈraɪənɛər", "alphabet": "ipa"},
+    {"string_to_replace": "easyJet", "type": "phoneme", "phoneme": "ˈiːziˌdʒet", "alphabet": "ipa"},
+    {"string_to_replace": "Wizz Air", "type": "phoneme", "phoneme": "wɪz ɛər", "alphabet": "ipa"},
 
-    # Engines
-    "CFM LEAP": "C F M Leap",
-    "PW1100G": "Pratt and Whitney eleven hundred G",
-    "GTF": "G T F",
-    "GEnx": "G E n x",
-    "LEAP-1A": "Leap one A",
-    "LEAP-1B": "Leap one B",
-    "Trent XWB": "Trent X W B",
+    # ── Aircraft (alias works better for model numbers) ──
+    {"string_to_replace": "A220", "type": "alias", "alias": "A two-twenty"},
+    {"string_to_replace": "A320", "type": "alias", "alias": "A three-twenty"},
+    {"string_to_replace": "A321", "type": "alias", "alias": "A three twenty-one"},
+    {"string_to_replace": "A321XLR", "type": "alias", "alias": "A three twenty-one X L R"},
+    {"string_to_replace": "A330neo", "type": "alias", "alias": "A three-thirty neo"},
+    {"string_to_replace": "A330", "type": "alias", "alias": "A three-thirty"},
+    {"string_to_replace": "A340", "type": "alias", "alias": "A three-forty"},
+    {"string_to_replace": "A350", "type": "alias", "alias": "A three-fifty"},
+    {"string_to_replace": "A380", "type": "alias", "alias": "A three-eighty"},
+    {"string_to_replace": "737 MAX", "type": "alias", "alias": "seven thirty-seven Max"},
+    {"string_to_replace": "737-800", "type": "alias", "alias": "seven thirty-seven eight hundred"},
+    {"string_to_replace": "757", "type": "alias", "alias": "seven fifty-seven"},
+    {"string_to_replace": "767", "type": "alias", "alias": "seven sixty-seven"},
+    {"string_to_replace": "777X", "type": "alias", "alias": "triple seven X"},
+    {"string_to_replace": "777", "type": "alias", "alias": "triple seven"},
+    {"string_to_replace": "787", "type": "alias", "alias": "seven eighty-seven"},
+    {"string_to_replace": "747", "type": "alias", "alias": "seven forty-seven"},
+    {"string_to_replace": "E175", "type": "alias", "alias": "E one seventy-five"},
+    {"string_to_replace": "E190", "type": "alias", "alias": "E one-ninety"},
+    {"string_to_replace": "E195", "type": "alias", "alias": "E one ninety-five"},
+    {"string_to_replace": "CRJ", "type": "alias", "alias": "C R J"},
+    {"string_to_replace": "ATR 72", "type": "alias", "alias": "A T R seventy-two"},
+    {"string_to_replace": "ATR 42", "type": "alias", "alias": "A T R forty-two"},
+    {"string_to_replace": "C919", "type": "alias", "alias": "C nine-nineteen"},
+    {"string_to_replace": "MC-21", "type": "alias", "alias": "M C twenty-one"},
+    {"string_to_replace": "MAX 10", "type": "alias", "alias": "Max ten"},
+    {"string_to_replace": "MAX 8", "type": "alias", "alias": "Max eight"},
+    {"string_to_replace": "MAX 9", "type": "alias", "alias": "Max nine"},
 
-    # Organizations & Regulators
-    "FAA": "F A A",
-    "EASA": "Ee-ah-sah",
-    "IATA": "Eye-ah-tah",
-    "ICAO": "Eye-kay-oh",
-    "NTSB": "N T S B",
-    "DOT": "D O T",
-    "TSA": "T S A",
+    # ── Engines ──
+    {"string_to_replace": "CFM LEAP", "type": "alias", "alias": "C F M Leap"},
+    {"string_to_replace": "PW1100G", "type": "alias", "alias": "Pratt and Whitney eleven hundred G"},
+    {"string_to_replace": "GTF", "type": "alias", "alias": "G T F"},
+    {"string_to_replace": "GEnx", "type": "alias", "alias": "G E n x"},
+    {"string_to_replace": "LEAP-1A", "type": "alias", "alias": "Leap one A"},
+    {"string_to_replace": "LEAP-1B", "type": "alias", "alias": "Leap one B"},
+    {"string_to_replace": "Trent XWB", "type": "alias", "alias": "Trent X W B"},
 
-    # Airports (IATA codes used in context)
-    "LAX": "L A X",
-    "JFK": "J F K",
-    "ORD": "O R D",
-    "DFW": "D F W",
-    "ATL": "A T L",
-    "SFO": "S F O",
-    "LHR": "L H R",
-    "CDG": "C D G",
-    "NRT": "N R T",
-    "HND": "H N D",
-    "SIN": "sin",
-    "DXB": "D X B",
-    "AMS": "A M S",
-    "FRA": "F R A",
-    "MUC": "M U C",
-    "IST": "I S T",
+    # ── Organizations & Regulators ──
+    {"string_to_replace": "FAA", "type": "alias", "alias": "F A A"},
+    {"string_to_replace": "EASA", "type": "phoneme", "phoneme": "ˈiːɑːsɑː", "alphabet": "ipa"},
+    {"string_to_replace": "IATA", "type": "phoneme", "phoneme": "aɪˈɑːtə", "alphabet": "ipa"},
+    {"string_to_replace": "ICAO", "type": "phoneme", "phoneme": "aɪˈkeɪoʊ", "alphabet": "ipa"},
+    {"string_to_replace": "NTSB", "type": "alias", "alias": "N T S B"},
+    {"string_to_replace": "DOT", "type": "alias", "alias": "D O T"},
+    {"string_to_replace": "TSA", "type": "alias", "alias": "T S A"},
 
-    # Industry terms
-    "ETOPS": "ee-tops",
-    "RPK": "R P K",
-    "ASK": "A S K",
-    "CASM": "caz-um",
-    "RASM": "raz-um",
-    "PRASM": "pee-raz-um",
-    "IPO": "I P O",
-    "M&A": "M and A",
-    "CEO": "C E O",
-    "CFO": "C F O",
-    "DOJ": "D O J",
-    "NMA": "N M A",
-    "MRO": "M R O",
-    "AOG": "A O G",
-    "ULCC": "U L C C",
-    "LCC": "L C C",
-    "FSC": "F S C",
+    # ── Airport codes ──
+    {"string_to_replace": "LAX", "type": "alias", "alias": "L A X"},
+    {"string_to_replace": "JFK", "type": "alias", "alias": "J F K"},
+    {"string_to_replace": "ORD", "type": "alias", "alias": "O R D"},
+    {"string_to_replace": "DFW", "type": "alias", "alias": "D F W"},
+    {"string_to_replace": "ATL", "type": "alias", "alias": "A T L"},
+    {"string_to_replace": "SFO", "type": "alias", "alias": "S F O"},
+    {"string_to_replace": "LHR", "type": "alias", "alias": "L H R"},
+    {"string_to_replace": "CDG", "type": "alias", "alias": "C D G"},
+    {"string_to_replace": "NRT", "type": "alias", "alias": "N R T"},
+    {"string_to_replace": "HND", "type": "alias", "alias": "H N D"},
+    {"string_to_replace": "DXB", "type": "alias", "alias": "D X B"},
+    {"string_to_replace": "AMS", "type": "alias", "alias": "A M S"},
+    {"string_to_replace": "FRA", "type": "alias", "alias": "F R A"},
+    {"string_to_replace": "MUC", "type": "alias", "alias": "M U C"},
+    {"string_to_replace": "IST", "type": "alias", "alias": "I S T"},
 
-    # People
-    "Akbar Al Baker": "Ak-bar Al Bah-ker",
-    "Guillaume Faury": "Gee-yohm For-ee",
-    "Willie Walsh": "Willie Walsh",
-    "Luis Gallego": "Loo-ees Gah-yay-go",
-    "Pieter Elbers": "Pee-ter El-bers",
+    # ── Industry terms ──
+    {"string_to_replace": "ETOPS", "type": "phoneme", "phoneme": "ˈiːtɒps", "alphabet": "ipa"},
+    {"string_to_replace": "RPK", "type": "alias", "alias": "R P K"},
+    {"string_to_replace": "CASM", "type": "phoneme", "phoneme": "ˈkæzəm", "alphabet": "ipa"},
+    {"string_to_replace": "RASM", "type": "phoneme", "phoneme": "ˈræzəm", "alphabet": "ipa"},
+    {"string_to_replace": "PRASM", "type": "phoneme", "phoneme": "ˈpiːræzəm", "alphabet": "ipa"},
+    {"string_to_replace": "IPO", "type": "alias", "alias": "I P O"},
+    {"string_to_replace": "M&A", "type": "alias", "alias": "M and A"},
+    {"string_to_replace": "CEO", "type": "alias", "alias": "C E O"},
+    {"string_to_replace": "CFO", "type": "alias", "alias": "C F O"},
+    {"string_to_replace": "DOJ", "type": "alias", "alias": "D O J"},
+    {"string_to_replace": "NMA", "type": "alias", "alias": "N M A"},
+    {"string_to_replace": "MRO", "type": "alias", "alias": "M R O"},
+    {"string_to_replace": "AOG", "type": "alias", "alias": "A O G"},
+    {"string_to_replace": "ULCC", "type": "alias", "alias": "U L C C"},
+    {"string_to_replace": "LCC", "type": "alias", "alias": "L C C"},
 
-    # Misc
-    "en route": "on route",
-    "codeshare": "code-share",
-    "widebody": "wide-body",
-    "narrowbody": "narrow-body",
-    "transcon": "trans-con",
-}
+    # ── People ──
+    {"string_to_replace": "Akbar Al Baker", "type": "phoneme", "phoneme": "ˈækbɑːr æl ˈbɑːkər", "alphabet": "ipa"},
+    {"string_to_replace": "Guillaume Faury", "type": "phoneme", "phoneme": "ɡiˈjoʊm foˈriː", "alphabet": "ipa"},
+    {"string_to_replace": "Luis Gallego", "type": "phoneme", "phoneme": "luˈis ɡɑːˈjeɪɡoʊ", "alphabet": "ipa"},
+    {"string_to_replace": "Pieter Elbers", "type": "phoneme", "phoneme": "ˈpiːtər ˈelbərz", "alphabet": "ipa"},
+
+    # ── Misc ──
+    {"string_to_replace": "en route", "type": "phoneme", "phoneme": "ɑːn ˈruːt", "alphabet": "ipa"},
+    {"string_to_replace": "widebody", "type": "alias", "alias": "wide-body"},
+    {"string_to_replace": "narrowbody", "type": "alias", "alias": "narrow-body"},
+    {"string_to_replace": "transcon", "type": "alias", "alias": "trans-con"},
+    {"string_to_replace": "codeshare", "type": "alias", "alias": "code-share"},
+]
+
+# Dictionary ID is cached after first creation. Set ELEVENLABS_DICT_ID
+# in GitHub secrets to skip re-creating it every run.
+_pronunciation_dict_cache = {}
 
 
+def get_or_create_pronunciation_dict() -> dict:
+    """Get or create the ElevenLabs pronunciation dictionary. Returns {id, version_id}."""
+    if _pronunciation_dict_cache:
+        return _pronunciation_dict_cache
+
+    api_key = os.environ.get("ELEVENLABS_API_KEY")
+    if not api_key:
+        return {}
+
+    dict_id = os.environ.get("ELEVENLABS_DICT_ID")
+
+    if dict_id:
+        # Fetch existing dictionary to get current version_id, then update rules
+        print(f"  Updating pronunciation dictionary {dict_id}...")
+        resp = requests.post(
+            f"https://api.elevenlabs.io/v1/pronunciation-dictionaries/{dict_id}/rules",
+            headers={"xi-api-key": api_key, "Content-Type": "application/json"},
+            json={"rules": PRONUNCIATION_RULES},
+            timeout=30,
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            result = {"id": dict_id, "version_id": data.get("version_id", "")}
+            _pronunciation_dict_cache.update(result)
+            print(f"  ✓ Dictionary updated ({len(PRONUNCIATION_RULES)} rules)")
+            return result
+        else:
+            print(f"  ⚠ Dict update failed ({resp.status_code}): {resp.text[:200]}")
+            # Try to get version_id anyway
+            get_resp = requests.get(
+                f"https://api.elevenlabs.io/v1/pronunciation-dictionaries/{dict_id}",
+                headers={"xi-api-key": api_key},
+                timeout=15,
+            )
+            if get_resp.status_code == 200:
+                data = get_resp.json()
+                result = {"id": dict_id, "version_id": data.get("latest_version_id", "")}
+                _pronunciation_dict_cache.update(result)
+                return result
+            return {}
+
+    # No dict ID — create a new one
+    print("  Creating pronunciation dictionary...")
+    resp = requests.post(
+        "https://api.elevenlabs.io/v1/pronunciation-dictionaries/add-from-rules",
+        headers={"xi-api-key": api_key, "Content-Type": "application/json"},
+        json={
+            "name": "Runway Briefing Aviation",
+            "description": "Aviation terminology, airline names, aircraft models, and commonly mispronounced words for the Runway Briefing podcast.",
+            "rules": PRONUNCIATION_RULES,
+        },
+        timeout=30,
+    )
+
+    if resp.status_code in (200, 201):
+        data = resp.json()
+        result = {"id": data["id"], "version_id": data["version_id"]}
+        _pronunciation_dict_cache.update(result)
+        print(f"  ✓ Dictionary created: {data['id']} ({len(PRONUNCIATION_RULES)} rules)")
+        print(f"  ⚠ Save this as ELEVENLABS_DICT_ID in GitHub secrets to avoid re-creating: {data['id']}")
+        return result
+    else:
+        print(f"  ⚠ Dict creation failed ({resp.status_code}): {resp.text[:300]}")
+        return {}
+
+
+# Legacy fallback — still used if dictionary API fails
 def apply_phonetics(text: str) -> str:
-    """Replace aviation jargon with TTS-friendly pronunciations."""
-    for term, phonetic in PHONETICS_MAP.items():
-        # Use word-boundary-aware replacement to avoid partial matches
-        pattern = re.compile(re.escape(term), re.IGNORECASE)
-        text = pattern.sub(phonetic, text)
+    """Fallback: replace aviation jargon with TTS-friendly text. Used only if dict API fails."""
+    for rule in PRONUNCIATION_RULES:
+        if rule["type"] == "alias":
+            pattern = re.compile(re.escape(rule["string_to_replace"]), re.IGNORECASE)
+            text = pattern.sub(rule["alias"], text)
     return text
 
 
@@ -596,7 +667,7 @@ def generate_script(articles: list[dict], recent_context: str = "") -> str:
 # ──────────────────────────────────────────────
 
 def generate_audio(script: str, output_path: Path) -> Path:
-    """Convert script to MP3 via ElevenLabs API."""
+    """Convert script to MP3 via ElevenLabs API with pronunciation dictionary."""
     api_key = os.environ.get("ELEVENLABS_API_KEY")
     if not api_key:
         print("ERROR: ELEVENLABS_API_KEY not set")
@@ -617,8 +688,32 @@ def generate_audio(script: str, output_path: Path) -> Path:
     clean = re.sub(r"^---+$", "", clean, flags=re.MULTILINE)  # dividers
     clean = re.sub(r"\n{3,}", "\n\n", clean)
 
-    # Apply pronunciation fixes for aviation jargon
-    clean = apply_phonetics(clean)
+    # Get or create pronunciation dictionary
+    pdict = get_or_create_pronunciation_dict()
+
+    # Build request payload
+    payload = {
+        "text": clean.strip(),
+        "model_id": ELEVENLABS_MODEL,
+        "voice_settings": {
+            "stability": 0.5,
+            "similarity_boost": 0.75,
+            "style": 0.3,
+            "use_speaker_boost": True,
+        },
+    }
+
+    # Attach pronunciation dictionary if available
+    if pdict.get("id") and pdict.get("version_id"):
+        payload["pronunciation_dictionary_locators"] = [{
+            "pronunciation_dictionary_id": pdict["id"],
+            "version_id": pdict["version_id"],
+        }]
+        print(f"  Using pronunciation dictionary: {pdict['id']}")
+    else:
+        # Fallback to text replacement if dict API failed
+        print("  ⚠ No pronunciation dictionary — falling back to text replacement")
+        payload["text"] = apply_phonetics(payload["text"])
 
     resp = requests.post(
         f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}",
@@ -627,16 +722,7 @@ def generate_audio(script: str, output_path: Path) -> Path:
             "Content-Type": "application/json",
             "xi-api-key": api_key,
         },
-        json={
-            "text": clean.strip(),
-            "model_id": ELEVENLABS_MODEL,
-            "voice_settings": {
-                "stability": 0.5,
-                "similarity_boost": 0.75,
-                "style": 0.3,
-                "use_speaker_boost": True,
-            },
-        },
+        json=payload,
         timeout=180,
     )
     resp.raise_for_status()

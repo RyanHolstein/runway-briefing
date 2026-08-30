@@ -25,14 +25,14 @@ import requests
 ANTHROPIC_MODEL = "claude-sonnet-5"
 MAX_TOKENS = 16000
 
-ELEVENLABS_MODEL = "eleven_multilingual_v2"
+ELEVENLABS_MODEL = "eleven_v3"
 DEFAULT_VOICE_A = "pNInz6obpgDQGcFmaJgB"  # "Adam" — Host A
 DEFAULT_VOICE_B = "ErXwobaYiN019PkySvjV"  # "Antoni" — Host B (change in secrets)
 
 PODCAST_TITLE = "Runway Briefing"
 
-# Import phonetics from main pipeline
-from pipeline import PHONETICS_MAP, apply_phonetics
+# Import pronunciation tools from main pipeline
+from pipeline import PRONUNCIATION_RULES, apply_phonetics, get_or_create_pronunciation_dict
 
 
 # ──────────────────────────────────────────────
@@ -291,8 +291,25 @@ def generate_weekly_script(topic: dict, episodes: list[dict]) -> str:
 # Step 3: Generate two-voice audio
 # ──────────────────────────────────────────────
 
-def generate_voice_clip(text: str, voice_id: str, api_key: str) -> bytes:
-    """Generate audio for a single speaker's line."""
+def generate_voice_clip(text: str, voice_id: str, api_key: str, pdict: dict = None) -> bytes:
+    """Generate audio for a single speaker's line with pronunciation dictionary."""
+    payload = {
+        "text": text,
+        "model_id": ELEVENLABS_MODEL,
+        "voice_settings": {
+            "stability": 0.5,
+            "similarity_boost": 0.75,
+            "style": 0.3,
+            "use_speaker_boost": True,
+        },
+    }
+
+    if pdict and pdict.get("id") and pdict.get("version_id"):
+        payload["pronunciation_dictionary_locators"] = [{
+            "pronunciation_dictionary_id": pdict["id"],
+            "version_id": pdict["version_id"],
+        }]
+
     resp = requests.post(
         f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}",
         headers={
@@ -300,16 +317,7 @@ def generate_voice_clip(text: str, voice_id: str, api_key: str) -> bytes:
             "Content-Type": "application/json",
             "xi-api-key": api_key,
         },
-        json={
-            "text": text,
-            "model_id": ELEVENLABS_MODEL,
-            "voice_settings": {
-                "stability": 0.5,
-                "similarity_boost": 0.75,
-                "style": 0.3,
-                "use_speaker_boost": True,
-            },
-        },
+        json=payload,
         timeout=120,
     )
     resp.raise_for_status()
@@ -369,6 +377,11 @@ def generate_weekly_audio(script: str, output_path: Path) -> Path:
     print(f"  Voice A (Alex): {voice_a}")
     print(f"  Voice B (Sam): {voice_b}")
 
+    # Get pronunciation dictionary
+    pdict = get_or_create_pronunciation_dict()
+    if pdict:
+        print(f"  Using pronunciation dictionary: {pdict.get('id', 'none')}")
+
     # Parse dialogue
     dialogue = parse_dialogue(script)
     if not dialogue:
@@ -386,8 +399,9 @@ def generate_weekly_audio(script: str, output_path: Path) -> Path:
         speaker = segment["speaker"]
         text = segment["text"]
 
-        # Apply phonetics
-        text = apply_phonetics(text)
+        # Fallback text replacement only if no dictionary
+        if not pdict:
+            text = apply_phonetics(text)
 
         # Pick voice
         voice_id = voice_a if speaker == "ALEX" else voice_b
@@ -395,7 +409,7 @@ def generate_weekly_audio(script: str, output_path: Path) -> Path:
         print(f"  [{i+1}/{len(dialogue)}] {speaker}: {text[:60]}...")
 
         try:
-            audio_bytes = generate_voice_clip(text, voice_id, api_key)
+            audio_bytes = generate_voice_clip(text, voice_id, api_key, pdict)
             clip = AudioSegment.from_mp3(io.BytesIO(audio_bytes))
             combined += clip + short_pause
         except Exception as e:
