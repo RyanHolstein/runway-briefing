@@ -97,8 +97,8 @@ SOURCES = [
 
 FRESHNESS_HOURS = 28
 
-ANTHROPIC_MODEL = "claude-sonnet-4-20250514"
-MAX_TOKENS = 8192
+ANTHROPIC_MODEL = "claude-sonnet-5"
+MAX_TOKENS = 16000
 
 ELEVENLABS_MODEL = "eleven_flash_v2"
 DEFAULT_VOICE_ID = "pNInz6obpgDQGcFmaJgB"  # "Adam" — change in GitHub secrets
