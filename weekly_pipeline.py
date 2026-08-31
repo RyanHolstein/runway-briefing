@@ -219,7 +219,7 @@ Use your knowledge of aviation history, airline economics, fleet strategy, regul
 
 ## CRITICAL RULES
 
-- Script must be 2000-2500 words. That's about 15 minutes spoken.
+- Script must be 3000-3500 words. That's about 20-25 minutes spoken.
 - Format each line as: "RYAN: text" or "HOPE: text"
 - NO stage directions, NO sound cues, NO [laughs] or [pause]
 - NO markdown formatting. No bold, italic, asterisks, or headers. Straight to TTS.
@@ -591,12 +591,22 @@ def main():
     except Exception as e:
         print(f"  ⚠ Buzzsprout upload failed ({e}), continuing...")
 
-    # Step 6: Save to DB
+    # Step 6: Save to DB (reconnect — Neon times out during long audio generation)
     print("\n" + "=" * 50)
     print("STEP 6: Save to DB")
     print("=" * 50)
-    save_weekly_episode(conn, ep_title, ep_summary, topic)
-    conn.close()
+    try:
+        conn.close()
+    except Exception:
+        pass
+    conn = get_db()
+    if conn:
+        from pipeline import init_db
+        init_db(conn)
+        save_weekly_episode(conn, ep_title, ep_summary, topic)
+        conn.close()
+    else:
+        print("  ⚠ Could not reconnect to DB — episode not saved")
 
     print(f"\n✓ Weekly pipeline complete!")
 

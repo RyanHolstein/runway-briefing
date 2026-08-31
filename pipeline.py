@@ -97,8 +97,8 @@ SOURCES = [
 
 FRESHNESS_HOURS = 28
 
-ANTHROPIC_MODEL = "claude-sonnet-5"
-MAX_TOKENS = 16000
+ANTHROPIC_MODEL = "claude-sonnet-4-20250514"
+MAX_TOKENS = 8192
 
 ELEVENLABS_MODEL = "eleven_flash_v2"
 DEFAULT_VOICE_ID = "pNInz6obpgDQGcFmaJgB"  # "Adam" — change in GitHub secrets
@@ -259,7 +259,7 @@ def get_or_create_pronunciation_dict() -> dict:
         # Fetch existing dictionary to get current version_id, then update rules
         print(f"  Updating pronunciation dictionary {dict_id}...")
         resp = requests.post(
-            f"https://api.elevenlabs.io/v1/pronunciation-dictionaries/{dict_id}/rules",
+            f"https://api.elevenlabs.io/v1/pronunciation-dictionaries/{dict_id}/rules/set",
             headers={"xi-api-key": api_key, "Content-Type": "application/json"},
             json={"rules": PRONUNCIATION_RULES},
             timeout=30,
