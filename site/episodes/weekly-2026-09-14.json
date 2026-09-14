@@ -1,0 +1,27 @@
+{
+  "title": "Weekly Deep Dive: AirBaltic's Bankruptcy and the A220's Reckoning",
+  "summary": "AirBaltic just filed for Chapter 11, and it's not just a Latvian airline's problem \u2014 it's a stress test for the entire A220 program and the idea that betting your whole airline on one aircraft type is a smart strategy. Ryan and Hope dig into what actually broke at airBaltic, why the engines are the real villain of this story, and what it means for every other airline that's ordered hundreds of these jets.",
+  "date": "2026-09-14",
+  "type": "weekly",
+  "topic": {
+    "topic": "AirBaltic's bankruptcy filing threatens the Airbus A220 business model and raises questions about airline viability when betting heavily on a single aircraft type.",
+    "why": "AirBaltic's Chapter 11 filing is the clearest signal yet that the A220 strategy\u2014which was supposed to be transformational for regional airlines\u2014carries existential risk. This isn't a routine restructuring; it's a fundamental challenge to one of aviation's biggest bets on aircraft commonality. The timing matters: the A220 is still ramping production, other carriers are doubling down on orders, and this failure could reshape the entire regional aviation ecosystem.",
+    "key_facts": [
+      "AirBaltic, an all-Airbus operator with A220s central to its network, filed for Chapter 11 bankruptcy protection while claiming operations will continue",
+      "The A220 was pitched as the game-changer for regional profitability\u2014lower costs, better range, higher margins than previous-generation regional jets",
+      "Multiple sources (Live and Let's Fly, Simple Flying, AirlineGeeks) covered the story on the same day, indicating broad industry recognition of significance",
+      "Airbus has aggressive A220 production targets and other carriers (Breeze, Air Canada, others) have ordered hundreds of these aircraft betting on similar unit economics",
+      "The filing raises questions about whether single-aircraft-type strategies are viable for carriers without massive scale or deep pockets"
+    ],
+    "related_articles": [
+      "AirBaltic Files For Bankruptcy, Putting Its Ambitious A220 Strategy On Trial",
+      "This All-Airbus European Airline Just Filed For Chapter 11 Bankruptcy: What Next?",
+      "AirBaltic Files for Bankruptcy"
+    ],
+    "angles": [
+      "Does the A220's unit economics actually work, or did AirBaltic simply execute poorly? What does this mean for other A220 operators who are counting on similar margins?",
+      "The concentration risk: What happens when you go all-in on a single aircraft type from a single manufacturer? How does this compare to carriers with mixed fleets?",
+      "Airbus's production ramp and customer confidence: With hundreds of A220s on order from other airlines, does AirBaltic's failure slow down the program or create buyer's remorse among customers?"
+    ]
+  }
+}
