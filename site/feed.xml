@@ -14,11 +14,27 @@
     <atom:link href="https://RyanHolstein.github.io/runway-briefing/feed.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title>Weekly Deep Dive: AirBaltic's Bankruptcy and the A220's Reckoning</title>
+      <description><![CDATA[AirBaltic just filed for Chapter 11, and it's not just a Latvian airline's problem — it's a stress test for the entire A220 program and the idea that betting your whole airline on one aircraft type is a smart strategy. Ryan and Hope dig into what actually broke at airBaltic, why the engines are the real villain of this story, and what it means for every other airline that's ordered hundreds of these jets.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-09-14.mp3" length="21496938" type="audio/mpeg"/>
+      <guid isPermaLink="false">fd572cc82c00ef2b290d2833c40381bc</guid>
+      <pubDate>Mon, 14 Sep 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
       <title>Amazon's Deadly Miami Crash: Cargo Aviation's Safety Blind Spot</title>
       <description><![CDATA[A Prime Air-branded Boeing 767 freighter overran the runway in Miami and killed at least five people, and this week we go deep on why cargo aviation operates under a completely different safety rulebook than the passenger airlines you fly. We trace the eerie parallels to the 2019 Atlas Air crash, explain why cargo pilots are exempt from fatigue rules that apply to everyone else, and ask whether Amazon's breakneck expansion is outrunning its safety culture.]]></description>
       <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-09-07.mp3" length="19667949" type="audio/mpeg"/>
       <guid isPermaLink="false">63d9c8ec99001b56b4520d131bdbdc36</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
+      <title>Chicago's Airline Turf War Heats Up, JFK's Terminal One Slips Again, and Congress Wants to Gut National Airport</title>
+      <description><![CDATA[American is literally handing out free elite status on planes to keep Chicago flyers loyal, while United counters with a Tokyo route relaunch — welcome to the hottest hub fight in the country. Plus, JFK's shiny new Terminal One pushes to 2027 (even as Air France unveils a massive new lounge for it), a Senate bill could gut half of Reagan National's long-haul flights, and new NTSB data reveals exactly what went wrong on that Amazon cargo jet in Miami.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/2026-09-15.mp3" length="3983613" type="audio/mpeg"/>
+      <guid isPermaLink="false">273b4ebc3e86c940b5a2cba7763702b9</guid>
+      <pubDate>Tue, 15 Sep 2026 00:00:00 +0000</pubDate>
       <itunes:episodeType>full</itunes:episodeType>
     </item>
     <item>
