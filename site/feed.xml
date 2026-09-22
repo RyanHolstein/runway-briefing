@@ -14,6 +14,14 @@
     <atom:link href="https://RyanHolstein.github.io/runway-briefing/feed.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title>Weekly Deep Dive: UK Air Traffic Control Is Breaking, and Airlines Are Finally Saying So Out Loud</title>
+      <description><![CDATA[Two meltdowns in under two weeks and a bug that lasted one millisecond took down flights across an entire continent. Ryan and Hope dig into the strange ownership structure of UK air traffic control, the 2023 disaster that should have fixed this, and why airlines are running out of patience with a system they partly own themselves.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-09-21.mp3" length="19743182" type="audio/mpeg"/>
+      <guid isPermaLink="false">42c1fb92ef2e3c8743457d6349837a46</guid>
+      <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
       <title>Weekly Deep Dive: AirBaltic's Bankruptcy and the A220's Reckoning</title>
       <description><![CDATA[AirBaltic just filed for Chapter 11, and it's not just a Latvian airline's problem — it's a stress test for the entire A220 program and the idea that betting your whole airline on one aircraft type is a smart strategy. Ryan and Hope dig into what actually broke at airBaltic, why the engines are the real villain of this story, and what it means for every other airline that's ordered hundreds of these jets.]]></description>
       <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-09-14.mp3" length="21496938" type="audio/mpeg"/>
@@ -27,6 +35,14 @@
       <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-09-07.mp3" length="19667949" type="audio/mpeg"/>
       <guid isPermaLink="false">63d9c8ec99001b56b4520d131bdbdc36</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
+      <title>FAA's Fiber Line Fiasco, America Threatens to Ground Iran's Airlines, and Air New Zealand Pilots Throw Hands in San Francisco</title>
+      <description><![CDATA[A cut fiber cable takes down the Northeast's airspace and cancels over a thousand flights in one day. Plus, the US threatens to cut off fuel to any airport that services Iranian planes, two Air New Zealand pilots get into it on a layover and strand a planeful of passengers for 14 hours, and American's building a four-and-a-half-billion-dollar terminal in Phoenix.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/2026-09-22.mp3" length="4122793" type="audio/mpeg"/>
+      <guid isPermaLink="false">272636ef7c9af0393eb1fd92482d235c</guid>
+      <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
       <itunes:episodeType>full</itunes:episodeType>
     </item>
     <item>
