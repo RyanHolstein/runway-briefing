@@ -1,0 +1,29 @@
+{
+  "title": "Weekly Deep Dive: Boeing's Impossible Week \u2014 Winning Big While Falling Behind",
+  "summary": "Boeing landed a massive Turkish Airlines order and a $36 billion week, but the 737 MAX 10 still can't get FAA sign-off, and the China mega-deal is slipping away for good. Ryan and Hope dig into why airlines keep buying a jet that isn't even certified yet, how Airbus's own quality crisis is handing Boeing a rare opening, and what losing China really costs Boeing over the next decade.",
+  "date": "2026-09-28",
+  "type": "weekly",
+  "topic": {
+    "topic": "Boeing's 737 MAX 10 software issues and delivery delays threaten the aircraft's certification timeline amid massive new orders from Turkish Airlines and supply chain pressure from the A321neo backlog.",
+    "why": "This story appeared in multiple sources this week and represents a critical inflection point for Boeing's recovery. With Turkish Airlines just ordering 150 MAX aircraft and Boeing facing FAA software reviews on the MAX 10, the company is simultaneously winning massive orders while struggling to deliver on existing commitments. The A321neo's quality defects are forcing Airbus to revive dormant factories, creating a rare window where Boeing could gain share\u2014but only if it can clear certification hurdles.",
+    "key_facts": [
+      "FAA is reviewing a software issue that could delay 737 MAX 10 certification further",
+      "Turkish Airlines placed order for up to 150 737 MAX aircraft despite Boeing's quality struggles",
+      "Boeing's China mega-order (200+ jets) is now in serious jeopardy, possibly abandoned entirely",
+      "Airbus A321neo has fuselage coating defects affecting 500+ aircraft, forcing production workarounds",
+      "Boeing won a $36 billion order this week but stock fell due to MAX 10 certification concerns"
+    ],
+    "related_articles": [
+      "The Air Current: Boeing faces potential 737 Max 10 delay as FAA reviews software issue",
+      "Simple Flying: Over 500 A321neos May Have Fuselage Coating Flaw, But Airbus Says They're Safe To Fly",
+      "Simple Flying: Boeing Unlikely To Land New China Mega-Order \u2013 Even Its 200-Jet Deal Hangs In The Balance",
+      "AirlineGeeks: Turkish Airlines Orders Up to 150 737 MAX Aircraft",
+      "Simple Flying: American Airlines Is The Last Legacy Carrier Without A Next-Gen Widebody Commitment & Boeing Just Made Its Move"
+    ],
+    "angles": [
+      "Why is Boeing winning massive new orders (Turkish, others) while simultaneously failing to clear certification on the MAX 10? What does this tell us about airline confidence vs. regulatory reality?",
+      "How does Airbus's A321neo quality crisis actually create an opening for Boeing, and will Boeing be able to capitalize before Airbus fixes its production issues?",
+      "The China deal collapse\u2014is this permanent due to geopolitics, or temporary? What does losing China mean for Boeing's long-term competitive position and recovery timeline?"
+    ]
+  }
+}
