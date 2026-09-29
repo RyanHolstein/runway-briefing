@@ -14,6 +14,14 @@
     <atom:link href="https://RyanHolstein.github.io/runway-briefing/feed.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title>Weekly Deep Dive: Boeing's Impossible Week — Winning Big While Falling Behind</title>
+      <description><![CDATA[Boeing landed a massive Turkish Airlines order and a $36 billion week, but the 737 MAX 10 still can't get FAA sign-off, and the China mega-deal is slipping away for good. Ryan and Hope dig into why airlines keep buying a jet that isn't even certified yet, how Airbus's own quality crisis is handing Boeing a rare opening, and what losing China really costs Boeing over the next decade.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-09-28.mp3" length="20271482" type="audio/mpeg"/>
+      <guid isPermaLink="false">de047125ee31170cd0e660e93860c390</guid>
+      <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
       <title>Weekly Deep Dive: UK Air Traffic Control Is Breaking, and Airlines Are Finally Saying So Out Loud</title>
       <description><![CDATA[Two meltdowns in under two weeks and a bug that lasted one millisecond took down flights across an entire continent. Ryan and Hope dig into the strange ownership structure of UK air traffic control, the 2023 disaster that should have fixed this, and why airlines are running out of patience with a system they partly own themselves.]]></description>
       <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-09-21.mp3" length="19743182" type="audio/mpeg"/>
@@ -35,6 +43,14 @@
       <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-09-07.mp3" length="19667949" type="audio/mpeg"/>
       <guid isPermaLink="false">63d9c8ec99001b56b4520d131bdbdc36</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
+      <title>Runway Briefing — Alaska Bets Big on Beds, Boeing's MAX 10 Gets Benched Again, and a Tiny Island Runway Nobody's Heard Of</title>
+      <description><![CDATA[Alaska Airlines just dropped its biggest product overhaul ever — lie-flat seats on 737s, new suites, new lounges, the works — as it tries to catch up to the big three. Meanwhile Boeing's 737 MAX 10 hits another delay after United and Southwest straight-up refuse to take jets with a software bug Boeing sat on for two years. Plus, why a runway on a tiny Pacific atoll matters way more than it should, and Canada's airports might be about to get a $36 billion new landlord.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/2026-09-29.mp3" length="3619570" type="audio/mpeg"/>
+      <guid isPermaLink="false">c69fb4d2bbc44887e5bb88b2b9e6eb21</guid>
+      <pubDate>Tue, 29 Sep 2026 00:00:00 +0000</pubDate>
       <itunes:episodeType>full</itunes:episodeType>
     </item>
     <item>
