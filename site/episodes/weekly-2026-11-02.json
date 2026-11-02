@@ -1,0 +1,31 @@
+{
+  "title": "Weekly Deep Dive: Is Jet Fuel About to Break the Airline Industry?",
+  "summary": "Jet fuel prices are spiking hard enough to trigger layoffs at Alaska and AirBaltic, pay freezes at Ryanair, and route cuts at WestJet and Flydubai \u2014 all in the same week. Ryan and Hope dig into whether this is a temporary squeeze or a structural shift that reshapes fleets, bankrupts weaker carriers, and ends the A321XLR era before it even gets started.",
+  "date": "2026-11-02",
+  "type": "weekly",
+  "topic": {
+    "topic": "Jet fuel prices are spiking dramatically, forcing airlines to cut routes, freeze pay, and lay off workers\u2014this is becoming an existential threat to airline profitability.",
+    "why": "Fuel costs have been mentioned in at least 8+ articles this week as a direct driver of route cuts (WestJet, Flydubai), layoffs (Alaska 200 jobs, AirBaltic 300), pay freezes (Ryanair), and fare hikes. The Air Current explicitly warned aviation is 'on the verge of a correction.' Unlike temporary headwinds, this touches every airline's P&L simultaneously and forces strategic choices that reshape networks.",
+    "key_facts": [
+      "Ryanair cited a $2 billion fuel cost hit from Middle East conflict, triggering pay freezes and cost cuts",
+      "WestJet cancelled 15 international routes; Alaska laid off 200 employees; Frontier posted $104M loss despite record revenue",
+      "Multiple airlines (Frontier, JetBlue) posting losses despite high ticket prices, signaling fuel inflation is outpacing revenue",
+      "Heathrow, SkyTeam, and other infrastructure players are making simultaneous structural decisions under fuel pressure",
+      "The spike is forcing legacy carriers to rethink fleet strategy (delta skipping A321XLR, Southwest considering widebody despite decades of 737-only policy)"
+    ],
+    "related_articles": [
+      "The Air Current: Sky-high jet fuel is pushing aviation to the verge of a correction",
+      "Simple Flying: Alaska Air Group To Lay Off 200 Roles By Year's End, Cites Soaring Fuel Prices",
+      "Paddle Your Own Kanoo: Ryanair Will Implement Pay Freezes and Increase Use of AI to Offset Fuel Cost Surge",
+      "Simple Flying: WestJet Cancels All Flights To 15 Destinations",
+      "Live and Let's Fly: Frontier Airlines Loses $104 Million Despite Record Revenue"
+    ],
+    "angles": [
+      "How bad is it really? Compare fuel cost as % of operating expenses now vs. 2019-2023 to show whether this is cyclical or structural",
+      "Which airlines will survive this round vs. 2008? Look at cash reserves, debt maturity, and hedging strategies of the majors",
+      "Is this accelerating consolidation? With layoffs and route cuts, are we seeing a shakeout that leads to M&A or bankruptcies?",
+      "How does this reshape the aircraft order book? If fuel stays high, does the A321XLR boom reverse? Do airlines suddenly want more efficient widebodies?",
+      "The passenger impact: Are we seeing permanent route rationalization or temporary cuts that come back when fuel normalizes?"
+    ]
+  }
+}
