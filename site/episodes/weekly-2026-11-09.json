@@ -1,0 +1,27 @@
+{
+  "title": "Weekly Deep Dive: Three Near-Misses in Seven Days \u2014 Is US Air Traffic Control Breaking Down?",
+  "summary": "Three serious near-miss incidents in a single week \u2014 Miami, LAX, and John Wayne Airport \u2014 have aviation watchers asking if this is a statistical blip or a system finally buckling under years of controller shortages and post-COVID strain. Ryan and Hope dig into the history of ATC staffing crises, what the FAA and NTSB can actually do about it, and why this might be the moment airport capacity plans hit a wall.",
+  "date": "2026-11-09",
+  "type": "weekly",
+  "topic": {
+    "topic": "Multiple near-miss collisions at major US airports in two weeks signal a systemic air traffic control or pilot communication breakdown.",
+    "why": "Three serious near-miss incidents (Miami Lufthansa/American, LAX Air France/American, John Wayne Cessna jet blast) in 7 days across top-tier airports represent an unusual spike. This isn't isolated mechanic failures or weather\u2014it's execution failures at the human/system interface with potential regulatory and operational consequences that will reshape procedures, training, and possibly ATC staffing for years.",
+    "key_facts": [
+      "Lufthansa 747 and American 787 came within critical distance in Miami; Air France A350 and American A321 came within 400 feet at LAX in same week",
+      "Third incident: Cessna flipped by jet blast at John Wayne Airport same weekend, raising questions about ground operations and runway spacing",
+      "All three involved major carriers at congested hub airports with heavy traffic and complex airspace",
+      "Pattern suggests communication failures, procedural gaps, or controller workload issues rather than random events",
+      "No fatalities but near-miss severity forces FAA/NTSB into mandatory review of ATC procedures, pilot training, and potentially staffing levels"
+    ],
+    "related_articles": [
+      "Simple Flying: Lufthansa 747 'Very Close To An Accident' In Miami As American Airlines 787 Turns Into Its Path",
+      "View from the Wing: Air France Jet Turns Toward American Airlines Plane After Takeoff At LAX\u2014Controller Warns 'Traffic 12 O'Clock'",
+      "Simple Flying: United 737 Jet Blast Reportedly Flips Cessna At John Wayne Airport, But Officials Blame Wind"
+    ],
+    "angles": [
+      "Why are near-misses clustering at major hubs NOW? Is ATC understaffing finally reaching a tipping point, or has pilot training degraded post-COVID?",
+      "How will the FAA/NTSB respond? Will this trigger mandatory procedural changes, new equipment mandates, or staffing increases that hit airline operating costs?",
+      "What does this mean for airport expansion plans and slot allocation? If these airports are already at breaking point, how do new routes and larger aircraft fit?"
+    ]
+  }
+}
