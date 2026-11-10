@@ -14,6 +14,14 @@
     <atom:link href="https://RyanHolstein.github.io/runway-briefing/feed.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title>Weekly Deep Dive: Three Near-Misses in Seven Days — Is US Air Traffic Control Breaking Down?</title>
+      <description><![CDATA[Three serious near-miss incidents in a single week — Miami, LAX, and John Wayne Airport — have aviation watchers asking if this is a statistical blip or a system finally buckling under years of controller shortages and post-COVID strain. Ryan and Hope dig into the history of ATC staffing crises, what the FAA and NTSB can actually do about it, and why this might be the moment airport capacity plans hit a wall.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-11-09.mp3" length="20059994" type="audio/mpeg"/>
+      <guid isPermaLink="false">d4cbe4adff1496d7bc1916fcdb5d122e</guid>
+      <pubDate>Mon, 09 Nov 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
       <title>Weekly Deep Dive: Is Jet Fuel About to Break the Airline Industry?</title>
       <description><![CDATA[Jet fuel prices are spiking hard enough to trigger layoffs at Alaska and AirBaltic, pay freezes at Ryanair, and route cuts at WestJet and Flydubai — all in the same week. Ryan and Hope dig into whether this is a temporary squeeze or a structural shift that reshapes fleets, bankrupts weaker carriers, and ends the A321XLR era before it even gets started.]]></description>
       <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-11-02.mp3" length="17882009" type="audio/mpeg"/>
@@ -75,6 +83,14 @@
       <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-09-07.mp3" length="19667949" type="audio/mpeg"/>
       <guid isPermaLink="false">63d9c8ec99001b56b4520d131bdbdc36</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
+      <title>Hijack Scare on United, Boeing's Layoffs, and Qantas Claims the World's Longest Flight Number</title>
+      <description><![CDATA[A United flight from Newark to New Orleans turns terrifying when a passenger allegedly tries to storm the cockpit claiming he has a bomb — triggering the most severe hijack alert in the system. Plus, Boeing cuts 2,500 jobs as its production ramp stalls, seven airlines (and counting) get caught up in a massive Amadeus data breach, United opens a shiny new concourse at Dulles, and Qantas gives its future 22-hour marathon flight the most legendary flight number in the business.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/2026-11-10.mp3" length="3943070" type="audio/mpeg"/>
+      <guid isPermaLink="false">fbd38ad8119b343e708a4bfc6d84c51a</guid>
+      <pubDate>Tue, 10 Nov 2026 00:00:00 +0000</pubDate>
       <itunes:episodeType>full</itunes:episodeType>
     </item>
     <item>
