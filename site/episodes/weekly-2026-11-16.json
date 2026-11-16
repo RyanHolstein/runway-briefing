@@ -1,0 +1,30 @@
+{
+  "title": "Weekly Deep Dive: The Contractor Who Grounded America",
+  "summary": "A single contractor working without FAA oversight triggered only the second nationwide ground stop since 9/11 \u2014 and the explanation is scarier than the chaos it caused. Ryan and Hope dig into how America's air traffic control system allows unsupervised contractors to touch critical infrastructure, what the $30 billion infrastructure ask actually covers, and why this might be the story that finally forces Congress to deal with the FAA's deepest problems.",
+  "date": "2026-11-16",
+  "type": "weekly",
+  "topic": {
+    "topic": "A contractor working without FAA oversight caused the nationwide ground stop, exposing critical gaps in America's air traffic control oversight and system fragility.",
+    "why": "This story has the most long-term systemic significance for aviation. It's not just about one incident\u2014it reveals that the FAA lacks basic oversight of contractors performing critical infrastructure work, and it happened during only the second nationwide ground stop since 9/11. This touches on safety, regulatory failure, and infrastructure vulnerability that will drive policy changes for years.",
+    "key_facts": [
+      "A contractor performed work on the ATC communications system without FAA oversight or approval, directly causing the nationwide ground stop",
+      "This is only the second nationwide ground stop since 9/11, suggesting the system is more fragile than the public realizes",
+      "The incident exposed gaps in FAA contractor management and quality control procedures",
+      "Multiple sources noted the ground stop fallout 'keeps getting weirder' and the aftermath chaos with planes and crews stuck in wrong cities",
+      "United CEO Scott Kirby's confident claims about merger approval and blaming FAA for O'Hare taxi times suggest deeper systemic FAA credibility issues"
+    ],
+    "related_articles": [
+      "Paddle Your Own Kanoo: The Contractor Behind Friday's Historic Nationwide Ground Stop Was Carrying Out Work Without FAA Oversight",
+      "Live and Let's Fly: What Caused The FAA Meltdown? Duffy And Mullin Give Different Accounts",
+      "Simple Flying: Airlines Warn Ground Stop Chaos Is Far From Over With Planes & Crews Stuck In Wrong Cities",
+      "Live and Let's Fly: FAA Lifts Nationwide Ground Stop, But The Airline Meltdown Is Far From Over",
+      "White House Urges Congress To Approve $30 Billion In Upgrades To US Aviation Infrastructure"
+    ],
+    "angles": [
+      "How did a contractor get access to critical FAA infrastructure without oversight? What are the actual approval and quality control procedures, and are they adequate?",
+      "Compare this to other industries (power grid, telecom, water systems)\u2014does aviation have weaker contractor management than critical infrastructure peers?",
+      "What does this mean for the $30 billion infrastructure investment Congress is being asked to approve\u2014will it address contractor oversight, or just capacity?",
+      "Is the FAA fundamentally understaffed to manage modern air traffic systems, or is this a management/process failure that could happen again soon?"
+    ]
+  }
+}
