@@ -1,0 +1,32 @@
+{
+  "title": "Weekly Deep Dive: Can $50 Billion Fix an FAA That Lost Control of Its Own System?",
+  "summary": "The November 15 ground stop wasn't just a bad day for air travel \u2014 it exposed a contractor working without FAA oversight, pulled in the FBI over hacking concerns, and revealed that air traffic control still runs on floppy disks. This week, Ryan and Hope dig into Sean Duffy's $50 billion funding push, ask whether money can fix a culture problem, and look at what other countries are doing better.",
+  "date": "2026-11-23",
+  "type": "weekly",
+  "topic": {
+    "topic": "The FAA's systemic infrastructure crisis is forcing a $50 billion funding overhaul, but the real question is whether money can fix a broken culture of oversight and accountability.",
+    "why": "This story has legs far beyond this week's headlines. The November 15 ground stop wasn't just an outage\u2014it exposed contractor negligence, inadequate FAA oversight, potential cybersecurity gaps (FBI now involved), and a 50-year-old system still running on floppy disks. The $50 billion funding push is the largest infrastructure investment proposal in aviation history, but insiders are already questioning whether throwing money at the problem addresses the root cause: a regulatory agency that lost control of its own contractors and system architecture.",
+    "key_facts": [
+      "The November 15 nationwide ground stop was caused by contractor work performed without proper FAA oversight\u2014raising questions about how much control the agency actually has",
+      "FBI joined the investigation amid hacking concerns, turning this from an operational failure into a potential cybersecurity vulnerability",
+      "FAA still uses floppy disks in air traffic control and hopes to replace them by 2028\u2014a 2+ year delay for obsolete technology",
+      "Sean Duffy's $50 billion funding request is historic, but most of the money isn't even for ATC modernization\u2014it's spread across other transportation priorities",
+      "Multiple tech failures across Delta, United, and other carriers this week suggest systemic infrastructure fragility beyond just the FAA"
+    ],
+    "related_articles": [
+      "FAA Ground Stop Blamed On Elon Musk\u2014Here's Why That's Ridiculous",
+      "FAA's Flight Shutdown Fuels A $30 Billion Funding Push\u2014Most Of The Money Isn't Even For Air Traffic Control",
+      "New FAA Meltdown Report Points To Disturbing Oversight Changes Under Trump",
+      "FBI joins investigation into FAA router failure amid hacking concern",
+      "The FAA Still Uses Floppy Disks In Air Traffic Control\u2014And Hopes To Replace Them In 2028",
+      "NATS chief calls for whole-system resilience after September outages",
+      "Contractor Behind Friday's Historic Nationwide Ground Stop Was Carrying Out Work Without FAA Oversight"
+    ],
+    "angles": [
+      "Why did the FAA lose oversight of its own contractors, and is this a one-time failure or a symptom of a larger management breakdown?",
+      "Will $50 billion actually modernize ATC, or is Congress about to fund a system that's already half-obsolete before the upgrades finish?",
+      "The FBI involvement: Is this just a routine precaution or did someone actually breach critical infrastructure, and what are airlines' real cybersecurity exposures?",
+      "Global implications: How are other countries' air traffic systems more resilient, and what can the FAA actually learn from them before the next crisis hits?"
+    ]
+  }
+}
