@@ -14,6 +14,14 @@
     <atom:link href="https://RyanHolstein.github.io/runway-briefing/feed.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title>Weekly Deep Dive: Can $50 Billion Fix an FAA That Lost Control of Its Own System?</title>
+      <description><![CDATA[The November 15 ground stop wasn't just a bad day for air travel — it exposed a contractor working without FAA oversight, pulled in the FBI over hacking concerns, and revealed that air traffic control still runs on floppy disks. This week, Ryan and Hope dig into Sean Duffy's $50 billion funding push, ask whether money can fix a culture problem, and look at what other countries are doing better.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-11-23.mp3" length="20714518" type="audio/mpeg"/>
+      <guid isPermaLink="false">c4f7a843582fd7356cbb08e55e709fbb</guid>
+      <pubDate>Mon, 23 Nov 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
       <title>Weekly Deep Dive: The Contractor Who Grounded America</title>
       <description><![CDATA[A single contractor working without FAA oversight triggered only the second nationwide ground stop since 9/11 — and the explanation is scarier than the chaos it caused. Ryan and Hope dig into how America's air traffic control system allows unsupervised contractors to touch critical infrastructure, what the $30 billion infrastructure ask actually covers, and why this might be the story that finally forces Congress to deal with the FAA's deepest problems.]]></description>
       <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-11-16.mp3" length="20124359" type="audio/mpeg"/>
@@ -91,6 +99,14 @@
       <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/weekly-2026-09-07.mp3" length="19667949" type="audio/mpeg"/>
       <guid isPermaLink="false">63d9c8ec99001b56b4520d131bdbdc36</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 +0000</pubDate>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
+    <item>
+      <title>Plus Ultra Grounds for Good, Delta Takes on Singapore Airlines, and Europe's Quiet War on Short-Haul Flights</title>
+      <description><![CDATA[A Spanish long-haul carrier runs out of road and grounds its entire A330 fleet overnight. Delta's throwing a night market in Seattle to announce a direct shot at Singapore Airlines, Austria proves you can replace a flight with a train and nobody notices, and two separate planes have very bad encounters with pavement and a catering truck within 24 hours of each other.]]></description>
+      <enclosure url="https://RyanHolstein.github.io/runway-briefing/episodes/2026-11-24.mp3" length="3892914" type="audio/mpeg"/>
+      <guid isPermaLink="false">e039ce0eb050e54a1fae7381dbd3e02d</guid>
+      <pubDate>Tue, 24 Nov 2026 00:00:00 +0000</pubDate>
       <itunes:episodeType>full</itunes:episodeType>
     </item>
     <item>
